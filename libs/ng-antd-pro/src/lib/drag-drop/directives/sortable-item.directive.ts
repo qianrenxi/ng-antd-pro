@@ -15,7 +15,7 @@ export class SortableItemDirective<T = any> extends DraggableDirective<T> {
 
   constructor(
     public element: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) protected _document: Document,
+    @Inject(DOCUMENT) protected _document: any,
     protected _viewContainerRef: ViewContainerRef,
     protected _ngZone: NgZone,
     dragDrop: DragDropService

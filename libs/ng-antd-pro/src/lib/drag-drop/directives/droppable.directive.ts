@@ -77,7 +77,7 @@ export class DroppableDirective implements AfterViewInit, OnDestroy {
 
   constructor(
     public element: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) private _document: Document,
+    @Inject(DOCUMENT) private _document: any,
     private _viewContainerRef: ViewContainerRef,
     private _ngZone: NgZone,
     dragDrop: DragDropService

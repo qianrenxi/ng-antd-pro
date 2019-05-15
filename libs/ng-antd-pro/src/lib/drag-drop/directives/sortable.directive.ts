@@ -67,7 +67,7 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
 
   constructor(
     public element: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) private _document: Document,
+    @Inject(DOCUMENT) private _document: any,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
     private _dragDropRegistry: DragDropRegistryService<any, any>,

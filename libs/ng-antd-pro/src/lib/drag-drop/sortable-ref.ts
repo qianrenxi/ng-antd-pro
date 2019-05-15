@@ -6,7 +6,6 @@ import { Subscription, Subject } from 'rxjs';
 import * as _ from 'lodash';
 import { coerceElement } from '@angular/cdk/coercion';
 import { moveItemInArray } from './drag-utils';
-import { element } from 'protractor';
 
 interface CachedItemPosition {
     /** Instance of the drag item. */

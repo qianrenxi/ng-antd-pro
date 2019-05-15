@@ -80,7 +80,7 @@ export class DraggableDirective<D = any> implements AfterViewInit, OnChanges, On
 
   constructor(
     public element: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) protected _document: Document,
+    @Inject(DOCUMENT) protected _document: any,
     protected _viewContainerRef: ViewContainerRef,
     protected _ngZone: NgZone,
     dragDrop: DragDropService

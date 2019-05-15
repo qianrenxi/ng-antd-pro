@@ -3,5 +3,7 @@
   "rules": {
     "directive-selector": [true, "attribute", ["np", "ap"], "camelCase"],
     "component-selector": [true, "element", ["np", "ap"], "kebab-case"]
-  }
+  },
+  "no-input-rename": false,
+  "no-output-rename": false,
 }

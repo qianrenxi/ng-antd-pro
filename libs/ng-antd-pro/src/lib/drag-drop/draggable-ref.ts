@@ -8,7 +8,6 @@ import { toggleNativeDragInteractions, extendStyles } from './drag-styling';
 import { DroppableRefInternal } from './droppable-ref';
 import * as _ from 'lodash';
 import { getTransformTransitionDurationInMs } from './transition-duration';
-import { element } from 'protractor';
 
 export interface DragRefConfig {
     dragStartThreshold: number;
