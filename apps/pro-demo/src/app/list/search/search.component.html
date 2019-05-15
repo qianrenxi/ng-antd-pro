@@ -1,0 +1,14 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '列表页'}, {label: '标准列表'}]" title="搜索列表" [tabs]="tabs" (tabChange)="tabChange($event)">
+  <ng-template #content>
+    <div class="text-center">
+      <nz-input-group nzSearch nzSize="large" [nzSuffix]="suffixButton" style="width: 525px;">
+        <input type="text" nz-input placeholder="请输入">
+        <ng-template #suffixButton>
+          <button nz-button nzType="primary" nzSize="large" nzSearch>搜索</button>
+        </ng-template>
+      </nz-input-group>
+    </div>
+  </ng-template>
+</np-page-header>
+
+<router-outlet></router-outlet>

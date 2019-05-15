@@ -1,0 +1,73 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '表单页'}, {label: '基础表单'}]" title="基础表单" content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。"></np-page-header>
+
+<div class="page-content">
+    <nz-card [nzBordered]="false">
+        <ng-container [ngTemplateOutlet]="simpleForm"></ng-container>
+    </nz-card>
+</div>
+
+<ng-template #simpleForm>
+    <form nz-form [formGroup]="formGroup" (ngSubmit)="_submitForm($event, formGroup.value)">
+        <nz-form-item>
+            <nz-form-label nzSpan="6">标题</nz-form-label>
+            <nz-form-control nzSpan="10">
+                <input nz-input formControlName="title" placeholder="给目标起个名字">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">起止日期</nz-form-label>
+            <nz-form-control nzSpan="10">
+                <nz-range-picker formControlName="dateRange" [nzPlaceHolder]="['开始日期', '结束日期']"></nz-range-picker>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">目标描述</nz-form-label>
+            <nz-form-control nzSpan="10">
+                <textarea nz-input formControlName="goal" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="请输入你的阶段性工作目标" rows="3"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">衡量标准</nz-form-label>
+            <nz-form-control nzSpan="10">
+                <textarea nz-input formControlName="standard" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="请输入衡量标准" rows="3"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">客户 <em class="optional">（选填）</em></nz-form-label>
+            <nz-form-control nzSpan="10">
+                <input nz-input formControlName="client" placeholder="请描述你服务的客户，内部客户直接 @姓名／工号">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">邀评人 <em class="optional">（选填）</em></nz-form-label>
+            <nz-form-control nzSpan="10">
+                <input nz-input formControlName="invites" placeholder="请直接 @姓名／工号，最多可邀请 5 人">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">权重 <em class="optional">（选填）</em></nz-form-label>
+            <nz-form-control nzSpan="10">
+                <nz-input-number formControlName="weight" [nzPlaceHolder]="'请输入'"></nz-input-number>
+                <span className="ant-form-text"> %</span>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="6">目标公开</nz-form-label>
+            <nz-form-control nzSpan="10">
+                <nz-radio-group formControlName="public">
+                    <label nz-radio nzValue="public">公开</label>
+                    <label nz-radio nzValue="protecte">部分公开</label>
+                    <label nz-radio nzValue="private">不公开</label>
+                </nz-radio-group>
+                <nz-form-explain>客户、邀评人默认被分享</nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="mt-4">
+            <nz-form-control [nzOffset]="6">
+                <button nz-button nzType="primary">提 交</button>
+                <button type="button" nz-button class="ml-2">保 存</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>

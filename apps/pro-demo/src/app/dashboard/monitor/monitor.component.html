@@ -1,0 +1,62 @@
+<div class="page-content">
+  <nz-row nzGutter="24">
+    <nz-col nzXl="18" nzLg="24">
+      <ng-container *ngFor="let panel of [projectsPanel]">
+        <ng-template [ngTemplateOutlet]="panel"></ng-template>
+      </ng-container>
+    </nz-col>
+    <nz-col nzXl="6" nzLg="24">
+      <ng-container *ngFor="let panel of [quickStartPanel, exponentPanel]">
+        <ng-template [ngTemplateOutlet]="panel"></ng-template>
+      </ng-container>
+    </nz-col>
+  </nz-row>
+
+  <nz-row nzGutter="24">
+    <nz-col nzXl="12" nzLg="24">
+      <ng-container [ngTemplateOutlet]="activityPanel"></ng-container>
+    </nz-col>
+    <nz-col nzXl="6" nzLg="12">
+      <ng-container [ngTemplateOutlet]="teamPanel"></ng-container>
+    </nz-col>
+    <nz-col nzXl="6" nzLg="12">
+      <ng-container [ngTemplateOutlet]="teamPanel2"></ng-container>
+    </nz-col>
+  </nz-row>
+</div>
+
+<ng-template #projectsPanel>
+  <nz-card nzTitle="活动实时交易情况" [nzBordered]="false" [nzLoading]="true" style="height:500px;">
+
+  </nz-card>
+</ng-template>
+
+<ng-template #quickStartPanel>
+  <nz-card nzTitle="活动情况预测" [nzBordered]="false" [nzLoading]="true">
+
+  </nz-card>
+</ng-template>
+
+<ng-template #exponentPanel>
+  <nz-card nzTitle="券核效率" [nzBordered]="false" [nzLoading]="true">
+
+  </nz-card>
+</ng-template>
+
+<ng-template #activityPanel>
+  <nz-card nzTitle="各品类占比" [nzBordered]="false" [nzLoading]="true">
+
+  </nz-card>
+</ng-template>
+
+<ng-template #teamPanel>
+  <nz-card nzTitle="热门搜索" [nzBordered]="false" [nzLoading]="true">
+
+  </nz-card>
+</ng-template>
+
+<ng-template #teamPanel2>
+  <nz-card nzTitle="资源剩余" [nzBordered]="false" [nzLoading]="true">
+
+  </nz-card>
+</ng-template>

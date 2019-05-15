@@ -1,0 +1,36 @@
+.main-layout {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    .main-layout-content {
+        >nz-header {
+            // background: #001529;
+            // padding: 0 50px;
+            // height: 64px;
+            // line-height: 64px;
+            padding: 0;
+            color: #fefefe;
+            line-height: unset;
+        }
+        >nz-content {
+            overflow: auto;
+            position: relative;
+        }
+        >nz-footer {
+            // background: #f0f2f5;
+            // padding: 24px 50px;
+            // color: rgba(0, 0, 0, .65);
+            // font-size: 14px;
+            padding: 0;
+        }
+    }
+}
+
+.logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, .2);
+    margin: 16px 28px;
+    float: left;
+}

@@ -1,0 +1,55 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '栅格布局'}, {label: '简单示例'}]" title="栅格布局简单示例" content="这里的栅格布局主要服务于“控制面板” 或 “工作台/仪表盘” 类页面布局方案。支持用户自定义面板属性。"></np-page-header>
+
+<div class="page-content">
+  <nz-card [nzBordered]="false">
+    <ul class="d-none">
+      <li>
+        <a href="http://..." target="_blank">View project on GitHub</a>
+      </li>
+      <li>
+        <a href="http://..." target="_blank">View this example's source on GitHub</a>
+      </li>
+      <li>
+        <a href="http://...">⇠ View the previous example: "Static Elements"</a>
+      </li>
+      <li>
+        <a href="http://...">⇢ View the next example: "LocalStorage"</a>
+      </li>
+    </ul>
+
+    <p class="d-none">
+      This demo shows what happens when items are dynamically added and removed.
+      <br />
+      You can remove an item by clicking its "x", and add a new one with the button.
+      <br />
+      To further illustration RGL's capacities, this particular example is responsive. Trying resizing the window.
+    </p>
+
+    <div class="state">
+      <p>Displayed as: [x, y, w h]</p>
+      <p>
+        Items:
+        <span *ngFor="let item of items" class="ml-2">
+          <strong>{{item.label}}:</strong>
+          [{{item.rect.x}}, {{item.rect.y}}, {{item.rect.w}}, {{item.rect.h}}]
+        </span>
+      </p>
+      <button (click)="addItem()" nz-button>Add Item</button>
+    </div>
+  </nz-card>
+
+  <div apGridLayout class="mt-4">
+    <div class="row" style="margin: 0 -4px; position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+      <div *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,11,12]" class="col" style="padding: 0 4px; height: 100%;">
+        <div style="height: 100%; background: red; opacity: 0.3; text-align: center;">{{item}}</div>
+      </div>
+    </div>
+    <div apGridItem apDraggable apResizable [resizeHandles]="'right-bottom'" *ngFor="let item of items" [rect]="item.rect">
+      <nz-card [nzBordered]="false" class="w-100 h-100 text-center">
+        <strong>{{item.label}}</strong>
+        <br>
+        [x: {{item.rect.x}}, y: {{item.rect.y}}, w: {{item.rect.w}}, h: {{item.rect.h}}]
+      </nz-card>
+    </div>
+  </div>
+</div>

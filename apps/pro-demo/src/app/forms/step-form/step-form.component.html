@@ -1,0 +1,120 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '表单页'}, {label: '分步表单（填写转账信息）'}]" title="分步表单" content="将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。"></np-page-header>
+
+<div class="page-content">
+
+    <nz-card [nzBordered]="false">
+        <nz-steps [(nzCurrent)]="current">
+            <nz-step [nzTitle]="'填写转账信息'"></nz-step>
+            <nz-step [nzTitle]="'确认转账信息'"></nz-step>
+            <nz-step [nzTitle]="'完成'"></nz-step>
+        </nz-steps>
+        <div class="steps-content">
+            <ng-container [ngTemplateOutlet]="[step1, step2, step3][current]"></ng-container>
+        </div>
+    </nz-card>
+
+</div>
+
+<ng-template #step1>
+    <form nz-form [formGroup]="infoForm" (ngSubmit)="_submitInfoForm($event, infoForm.value)" class="step-form">
+        <nz-form-item>
+            <nz-form-label nzSpan="4">付款账户</nz-form-label>
+            <nz-form-control nzSpan="20">
+                <nz-select formControlName="payAccount">
+                    <nz-option [nzLabel]="'ant-design@alipay.com'" [nzValue]="'ant-design@alipay.com'">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="4">收款账户</nz-form-label>
+            <nz-form-control nzSpan="20">
+                <nz-input-group nzCompact>
+                    <nz-select formControlName="receiverAccountType" style="width: 100px;">
+                        <nz-option [nzLabel]="'支付宝'" [nzValue]="'alipay'"></nz-option>
+                        <nz-option [nzLabel]="'银行账户'" [nzValue]="'bank'"></nz-option>
+                    </nz-select>
+                    <input type="text" nz-input formControlName="receiverAccount" style="width: calc(100% - 100px);" placeholder="test@example.com">
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="4">收款人姓名</nz-form-label>
+            <nz-form-control nzSpan="20">
+                <input type="text" nz-input formControlName="receiverName" placeholder="请输入收款人姓名">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzSpan="4">转账金额</nz-form-label>
+            <nz-form-control nzSpan="20">
+                <input type="number" nz-input formControlName="amount" nzPrefix="￥" placeholder="请输入金额">
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="mt-4">
+            <nz-form-control [nzOffset]="4">
+                <button nz-button nzType="primary">下一步</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+    <nz-divider></nz-divider>
+    <div class="desc">
+        <h3>说明</h3>
+        <h4>转账到支付宝账户</h4>
+        <p>
+            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+        </p>
+        <h4>转账到银行卡</h4>
+        <p>
+            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+        </p>
+    </div>
+</ng-template>
+
+<ng-template #step2>
+    <div class="step-form">
+        <nz-alert nzType="info" nzMessage="确认转账后，资金将直接打入对方账户，无法退回。" [nzShowIcon]="true" [nzCloseable]="true" class="mb-4"></nz-alert>
+        <ng-container [ngTemplateOutlet]="infoDesc"></ng-container>
+        <nz-divider></nz-divider>
+        <form nz-form [formGroup]="confirmForm" (ngSubmit)="_submitConfirmForm($event, confirmForm.value)" nzLayout="horizontal">
+            <nz-form-item>
+                <nz-form-label nzSpan="4">支付密码</nz-form-label>
+                <nz-form-control nzSpan="20">
+                    <input type="password" nz-input formControlName="password" placeholder="请输入支付密码">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="mt-4">
+                <nz-form-control [nzOffset]="4">
+                    <button nz-button nzType="primary">提 交</button>
+                    <button type="button" nz-button class="ml-2" (click)="prev()">上一步</button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #step3>
+    <div style="margin: auto; max-width: 720px;">
+        <np-result type="success" title="操作成功" description="预计两小时内到账">
+            <ng-template #extra>
+                <ng-container [ngTemplateOutlet]="infoDesc"></ng-container>
+            </ng-template>
+            <ng-template #actions>
+                <button nz-button nzType="primary" class="mr-2" (click)="reset()">再转一笔</button>
+                <button nz-button class="mr-2">查看账单</button>
+            </ng-template>
+        </np-result>
+    </div>
+</ng-template>
+
+<ng-template #infoDesc>
+    <np-desc-list>
+        <np-desc term="付款账户">{{info?.payAccount}}</np-desc>
+        <np-desc term="收款账户">{{info?.receiverAccount}}</np-desc>
+        <np-desc term="收款人姓名">{{info?.receiverName}}</np-desc>
+        <np-desc term="转账金额">
+            <span style="font-size: 1.125rem">{{info?.amount}}</span>
+            <em>(贰佰叁拾叁元整)</em>
+        </np-desc>
+    </np-desc-list>
+</ng-template>

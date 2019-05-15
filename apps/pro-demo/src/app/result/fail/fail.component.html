@@ -1,0 +1,33 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '结果页'}, {label: '失败'}]"></np-page-header>
+
+<div class="page-content">
+    <nz-card [nzBordered]="false">
+      <section>
+        <np-result type="error" title="操作失败" description="请核对并修改以下信息后，再重新提交。">
+  
+          <ng-template #extra>
+            <div style="font-size: 16; color: rgba(0, 0, 0, 0.85); font-weight: 500; margin-bottom: 1.5rem;">您提交的内容有如下错误：</div>
+            <div style="margin-bottom: 16px;">
+                <i class="anticon anticon-close-circle-o" style="color: #f5222d; margin-right: 8px;"></i>
+                您的账户已被冻结
+                <a style="margin-left: 16px;">
+                  立即解冻 <i class="anticon anticon-right"></i>
+                </a>
+              </div>
+              <div>
+                  <i class="anticon anticon-close-circle-o" style="color: #f5222d; margin-right: 8px;"></i>
+                您的账户还不具备申请资格
+                <a style="margin-left: 16px;">
+                  立即升级 <i class="anticon anticon-right"></i>
+                </a>
+              </div>
+          </ng-template>
+  
+          <ng-template #actions>
+            <button nz-button nzType="primary" class="mr-2">返回修改</button>
+            <button nz-button>放弃操作</button>
+          </ng-template>
+        </np-result>
+      </section>
+    </nz-card>
+  </div>

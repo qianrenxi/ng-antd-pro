@@ -1,0 +1,98 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '列表页'}, {label: '标准列表'}]"></np-page-header>
+
+<div class="page-content">
+  <nz-card>
+    <nz-row>
+      <nz-col [nzSm]="8" [nzXs]="24">
+        <ng-container *ngTemplateOutlet="headerInfo; context: {title: '我的待办', value: '8个任务'}"></ng-container>
+      </nz-col>
+      <nz-col [nzSm]="8" [nzXs]="24">
+        <ng-container *ngTemplateOutlet="headerInfo; context: {title: '本周任务平均处理时间', value: '32分钟'}"></ng-container>
+      </nz-col>
+      <nz-col [nzSm]="8" [nzXs]="24">
+        <ng-container *ngTemplateOutlet="headerInfo; context: {title: '本周完成任务数', value: '24个任务', last: true}"></ng-container>
+      </nz-col>
+    </nz-row>
+  </nz-card>
+
+  <nz-card nzTitle="标准列表" [nzBordered]="false" [nzExtra]="extraContent" class="mt-4">
+    <ng-template #extraContent>
+      <nz-radio-group [(ngModel)]="filterStatus">
+        <label nz-radio-button nzValue="A">全部</label>
+        <label nz-radio-button nzValue="B">进行中</label>
+        <label nz-radio-button nzValue="C">等待中</label>
+      </nz-radio-group>
+      <nz-input-group nzSuffixIcon="anticon anticon-search" style="width: auto;" class="ml-3">
+        <input type="text" nz-input placeholder="请输入">
+      </nz-input-group>
+    </ng-template>
+
+    <button nz-button nzType="dashed" class="w-100"><i class="anticon anticon-plus"></i> 添加</button>
+
+    <nz-list [nzDataSource]="list" [nzRenderItem]="item" [nzPagination]="pagination" class="mt-3">
+      <ng-template #item let-i>
+        <nz-list-item [nzContent]="itemContent" [nzActions]="[actionEdit, actionMore]">
+          <nz-list-item-meta [nzTitle]="itemTitle" [nzAvatar]="itemAvatar" [nzDescription]="i.subDescription">
+            <ng-template #itemTitle>
+              <a href="javascript:;">{{i.title}}</a>
+            </ng-template>
+            <ng-template #itemAvatar>
+              <nz-avatar [nzSrc]="i.avatar" nzShape="square" nzSize="large" nzIcon="anticon anticon-user" style="width: 48px; height: 48px;"></nz-avatar>
+            </ng-template>
+          </nz-list-item-meta>
+          <ng-template #itemContent>
+            <div class="list-content">
+              <div class="list-content-item">
+                <span>Owner</span>
+                <p>{{i.owner}}</p>
+              </div>
+              <div class="list-content-item">
+                <span>开始时间</span>
+                <p>{{i.createdAt | date: 'yyyy-MM-dd HH:mm'}}</p>
+              </div>
+              <div class="list-content-item" style="width: 180px;">
+                <nz-progress [nzPercent]="i.percent" [nzStatus]="i.status" [nzStrokeWidth]="6"></nz-progress>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #actionEdit>
+            <a href="javascript:;">编辑</a>
+          </ng-template>
+          <ng-template #actionMore>
+            <nz-dropdown nzPlacement="bottomRight">
+              <a nz-dropdown>
+                更多 <i class="anticon anticon-down"></i>
+              </a>
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item>
+                  <a>1st menu item</a>
+                </li>
+                <li nz-menu-item>
+                  <a>2nd menu item</a>
+                </li>
+                <li nz-menu-item>
+                  <a>3rd menu item</a>
+                </li>
+              </ul>
+            </nz-dropdown>
+          </ng-template>
+        </nz-list-item>
+      </ng-template>
+
+      <ng-template #pagination>
+        <nz-pagination [nzPageIndex]="1" [nzTotal]="50" [nzShowSizeChanger]="true" [nzShowQuickJumper]="true" [nzShowTotal]="pageTotal">
+          <ng-template #pageTotal let-total>
+            共 {{total}} 条记录，
+          </ng-template>
+        </nz-pagination>
+      </ng-template>
+    </nz-list>
+  </nz-card>
+</div>
+
+<ng-template #headerInfo let-title="title" let-value="value" let-last="last">
+  <div [ngClass]="{'header-info': true, 'last': !!last}">
+    <span>{{title}}</span>
+    <p>{{value}}</p>
+  </div>
+</ng-template>

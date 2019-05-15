@@ -1,0 +1,105 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: 'dashboard'}, {label: '工作台'}]">
+  <ng-template #logo>
+    <nz-avatar nzSrc="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" nzSize="large" style="width: 72px; height: 72px;"></nz-avatar>
+  </ng-template>
+  <ng-template #content>
+    <div class="content-title">早安，曲丽丽，祝你开心每一天！</div>
+    <div>交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div>
+  </ng-template>
+  <ng-template #contentExtra>
+    <div class="state-item">
+      <p>项目数</p>
+      <p>56</p>
+    </div>
+    <div class="state-item">
+      <p>团队内排名</p>
+      <p>
+        8
+        <span> / 24</span>
+      </p>
+    </div>
+    <div class="state-item">
+      <p>项目访问</p>
+      <p>2,223</p>
+    </div>
+  </ng-template>
+</np-page-header>
+
+<div class="page-content">
+  <nz-row nzGutter="24">
+    <nz-col nzXl="16" nzLg="24">
+      <ng-container *ngFor="let panel of [projectsPanel, activityPanel]">
+        <ng-template [ngTemplateOutlet]="panel"></ng-template>
+      </ng-container>
+    </nz-col>
+    <nz-col nzXl="8" nzLg="24">
+      <ng-container *ngFor="let panel of [quickStartPanel, exponentPanel, teamPanel]">
+        <ng-template [ngTemplateOutlet]="panel"></ng-template>
+      </ng-container>
+    </nz-col>
+  </nz-row>
+</div>
+
+<ng-template #projectsPanel>
+  <nz-card nzTitle="进行中的项目" [nzExtra]="extraTpl" [nzBordered]="false" class="project-list">
+    <div nz-card-grid *ngFor="let item of notice">
+      <nz-card-meta [nzTitle]="item.title" [nzAvatar]="avatarTemplate">
+        <ng-template #avatarTemplate>
+          <nz-avatar [nzSrc]="item.logo" nzSize="small"></nz-avatar>
+        </ng-template>
+      </nz-card-meta>
+      <div class="content mt-2">
+        <div class="description">{{item.description}}</div>
+        <div class="d-flex mt-2">
+          <a class="member-link">{{item.member}}</a>
+          <span class="updatedAt ml-auto">1年前</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #extraTpl>
+      <a>全部项目</a>
+    </ng-template>
+  </nz-card>
+</ng-template>
+
+<ng-template #activityPanel>
+    <nz-card nzTitle="动态" [nzExtra]="extraTpl" [nzBordered]="false" class="activity-list">
+        <ng-template #extraTpl>
+          <a>全部动态</a>
+        </ng-template>
+
+        <nz-list [nzDataSource]="activities" [nzRenderItem]="item">
+          <ng-template #item let-i>
+            <nz-list-item>
+              <nz-list-item-meta
+                [nzTitle]="itemTitle"
+                [nzAvatar]="i.user?.avatar"
+                nzDescription="5天前">
+                <ng-template #itemTitle>
+                  <a>{{i.user?.name}}</a> 在 {{i.template}}
+                </ng-template>
+              </nz-list-item-meta>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </nz-card>
+</ng-template>
+
+<ng-template #quickStartPanel>
+<nz-card nzTitle="快速开始/便捷导航" [nzLoading]="true">
+  
+</nz-card>
+</ng-template>
+
+<ng-template #exponentPanel>
+    <nz-card nzTitle="xx指标" [nzLoading]="true">
+  
+    </nz-card>
+</ng-template>
+
+<ng-template #teamPanel>
+    <nz-card nzTitle="团队" [nzLoading]="true">
+  
+    </nz-card>
+</ng-template>

@@ -1,0 +1,13 @@
+
+<h2>sortable List</h2>
+<ul class="sortable-box" npSortable (npSortDrop)="onSortDrop($event)">
+  <li *ngFor="let item of items" class="sortable-item" npSortableItem>
+    {{item}}
+  </li>
+</ul>
+
+
+<h2>Free style sortable list</h2>
+<div class="sortable-box horizontal"  npSortable (npSortDrop)="onSortDrop($event)">
+  <div *ngFor="let item of items" class="sortable-item" npSortableItem>{{item}}</div>
+</div>

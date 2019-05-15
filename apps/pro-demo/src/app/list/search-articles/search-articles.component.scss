@@ -1,0 +1,24 @@
+:host .list-card ::ng-deep {
+    .ant-card-body {
+        padding: 8px 32px;
+    }
+}
+
+.list-content {
+    .description {
+        line-height: 22px;
+        max-width: 720px;
+    }
+    .extra {
+        color: rgba(0,0,0,.45);
+        margin-top: 16px;
+        line-height: 22px;
+
+        >.ant-avatar {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            vertical-align: top;
+        }
+    }
+}

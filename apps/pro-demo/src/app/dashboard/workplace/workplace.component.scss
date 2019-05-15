@@ -1,0 +1,80 @@
+$heading-color: rgba(0, 0, 0, 0.85);
+$text-color-secondary: rgba(0, 0, 0, 0.45);
+$border-color-split: rgba(0, 0, 0, 0.1);
+$font-size-base: 14px;
+:host ::ng-deep {
+    .page-header {
+        .content {
+            position: relative;
+            top: 4px;
+            margin-left: 8px;
+            flex: 1 1 auto;
+            color: $text-color-secondary;
+            line-height: 22px;
+            .content-title {
+                font-size: 20px;
+                line-height: 28px;
+                font-weight: 500;
+                color: $heading-color;
+                margin-bottom: 12px;
+            }
+        }
+        .extra-content {
+            .state-item {
+                padding: 0 32px;
+                position: relative;
+                display: inline-block;
+                >p:first-child {
+                    color: $text-color-secondary;
+                    font-size: $font-size-base;
+                    line-height: 22px;
+                    margin-bottom: 4px;
+                }
+                >p {
+                    color: $heading-color;
+                    font-size: 30px;
+                    line-height: 38px;
+                    margin: 0;
+                    >span {
+                        color: $text-color-secondary;
+                        font-size: 20px;
+                    }
+                }
+                &:after {
+                    background-color: $border-color-split;
+                    position: absolute;
+                    top: 8px;
+                    right: 0;
+                    width: 1px;
+                    height: 40px;
+                    content: '';
+                }
+                &:last-child {
+                    padding-right: 0;
+                    &:after {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+
+    .project-list {
+        .ant-card-body {
+            padding: 0;
+
+            .content {
+                clear: both;
+
+                .description {
+                    color: $text-color-secondary;
+                }
+            }
+        }
+    }
+}
+
+nz-card {
+    margin-bottom: 1.5rem;
+}

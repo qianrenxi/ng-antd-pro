@@ -1,0 +1,13 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '表单页'}, {label: '动态表单'}]"  title="动态表单"></np-page-header>
+
+<div class="page-content">
+  <nz-card [nzBordered]="false" class="mb-4">
+    <np-dynamic-form [fields]="fields" [formGroup]="formGroup"></np-dynamic-form>
+  </nz-card>
+  <nz-card [nzBordered]="false" class="mb-4">
+    <np-dynamic-form [fields]="searchForm.fields" [formGroup]="searchForm.formGroup" [nzGrid]="{column: 8}"></np-dynamic-form>
+  </nz-card>
+  <nz-card [nzBordered]="false" class="mb-4">
+    <np-dynamic-form [fieldsConfig]="fields3" [nzGrid]="{column: 8}"></np-dynamic-form>
+  </nz-card>
+</div>

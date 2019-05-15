@@ -1,0 +1,209 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '表单页'}, {label: '高级表单'}]" title="高级表单" content="高级表单常见于一次性输入和提交大批量数据的场景。"></np-page-header>
+
+<div class="page-content">
+    <nz-card nzTitle="仓库管理">
+        <ng-container [ngTemplateOutlet]="form1"></ng-container>
+    </nz-card>
+    <nz-card nzTitle="任务管理" class="mt-4">
+        <ng-container [ngTemplateOutlet]="form2"></ng-container>
+    </nz-card>
+    <nz-card nzTitle="成员管理" class="mt-4">
+        <ng-container [ngTemplateOutlet]="form3"></ng-container>
+    </nz-card>
+</div>
+
+<ng-template #form1>
+    <form nz-form [formGroup]="formGroup" (ngSubmit)="_submitForm($event, formGroup.value)" nzLayout="vertical">
+        <nz-row nzGutter="16">
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.name}}</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="name" placeholder="请输入仓库名称">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.url}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group nzAddOnBefore="Http://" nzAddOnAfter=".com">
+                            <input type="text" nz-input formControlName="url" placeholder="请输入">
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.owner}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="owner" nzPlaceHolder="请选择管理员" nzAllowClear>
+                            <nz-option *ngFor="let item of users" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.approver}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="approver" nzPlaceHolder="请选择审批员" nzAllowClear>
+                            <nz-option *ngFor="let item of users" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.dateRange}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-range-picker formControlName="dateRange" [nzPlaceHolder]="['开始日期', '结束日期']"></nz-range-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.type}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="type" nzPlaceHolder="请选择仓库类型" nzAllowClear>
+                            <nz-option *ngFor="let item of types" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+        </nz-row>
+    </form>
+</ng-template>
+
+<ng-template #form2>
+    <form nz-form [formGroup]="formGroup" (ngSubmit)="_submitForm($event, formGroup.value)" nzLayout="vertical">
+        <nz-row nzGutter="16">
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.name2}}</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="name2" placeholder="请输入">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.url2}}</nz-form-label>
+                    <nz-form-control>
+                        <input type="text" nz-input formControlName="url2" placeholder="请输入">
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.owner2}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="owner2" nzPlaceHolder="请选择执行人" nzAllowClear>
+                            <nz-option *ngFor="let item of users" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.approver2}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="approver2" nzPlaceHolder="请选择责任人" nzAllowClear>
+                            <nz-option *ngFor="let item of users" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.dateRange2}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-time-picker formControlName="dateRange2"></nz-time-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+            <nz-col nzLg="8" nzMd="12" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label>{{fieldLabels.type2}}</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="type2" nzPlaceHolder="请选择仓库类型" nzAllowClear>
+                            <nz-option *ngFor="let item of types" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-col>
+        </nz-row>
+    </form>
+</ng-template>
+
+<ng-template #form3>
+        <nz-table
+        #editRowTable
+        [nzData]="dataSet"
+        [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th nzWidth="25%">姓名</th>
+            <th nzWidth="15%">工号</th>
+            <th nzWidth="40%">所属部门</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of editRowTable.data">
+            <td>
+              <div class="editable-cell">
+                <div class="editable-cell-text-wrapper">
+                  <ng-container *ngIf="!editCache[data.key].edit">
+                    {{data.name}}
+                  </ng-container>
+                  <ng-container *ngIf="editCache[data.key].edit">
+                    <input type="text" nz-input [(ngModel)]="editCache[data.key].data.name" placeholder="姓名">
+                  </ng-container>
+                </div>
+              </div>
+            </td>
+            <td>
+              <ng-container *ngIf="!editCache[data.key].edit">
+                {{data.age}}
+              </ng-container>
+              <ng-container *ngIf="editCache[data.key].edit">
+                <input type="text" nz-input [(ngModel)]="editCache[data.key].data.age" placeholder="工号">
+              </ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="!editCache[data.key].edit">
+                {{data.address}}
+              </ng-container>
+              <ng-container *ngIf="editCache[data.key].edit">
+                <input type="text" nz-input [(ngModel)]="editCache[data.key].data.address" placeholder="所属部门">
+              </ng-container>
+            </td>
+            <td>
+              <div class="editable-row-operations">
+                <ng-container *ngIf="!editCache[data.key].edit">
+                  <a (click)="startEdit(data.key)">编辑</a>
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a>删除</a>
+                </ng-container>
+                <ng-container *ngIf="editCache[data.key].edit">
+                  <a (click)="saveEdit(data.key)">保存</a>
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <nz-popconfirm [nzTitle]="'确定取消?'" (nzOnConfirm)="cancelEdit(data.key)">
+                    <a nz-popconfirm>取消</a>
+                  </nz-popconfirm>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <button nz-button nzType="dashed" class="w-100 mt-3"><i class="anticon anticon-plus"></i> 添加成员</button>
+      
+</ng-template>

@@ -1,0 +1,48 @@
+<div class="page-content">
+  <nz-card>
+    <div>
+      所属类目：
+    </div>
+    <div>
+      Owner:
+    </div>
+    <div>
+      其他选项:
+    </div>
+  </nz-card>
+
+  <nz-card class="list-card mt-4">
+    <nz-list [nzDataSource]="list" [nzRenderItem]="item" nzItemLayout="vertical">
+      <ng-template #item let-i>
+        <nz-list-item [nzContent]="itemContent" [nzActions]="[starAction,likeAction,msgAction]">
+          <nz-list-item-meta [nzTitle]="itemTitle" [nzDescription]="itemDesc">
+            <ng-template #itemTitle>
+              <a href="javascript:;">{{i.title}}</a>
+            </ng-template>
+            <ng-template #itemDesc>
+              <span>
+                <nz-tag>Ant Design</nz-tag>
+                <nz-tag>设计语言</nz-tag>
+                <nz-tag>蚂蚁金服</nz-tag>
+              </span>
+            </ng-template>
+          </nz-list-item-meta>
+          <ng-template #itemContent>
+            <div class="list-content">
+              <div class="description">{{i.content}}</div>
+              <div class="extra">
+                <nz-avatar [nzSrc]="i.avatar" nzSize="small"></nz-avatar>
+                <a href={{i.href}}>{{i.owner}}</a> 发布在
+                <a href={{i.href}}> {{i.href}}</a>
+                <em class="ml-4"> {{i.updatedAt | date: 'yyyy-MM-dd HH:mm'}}</em>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #starAction><i class="anticon anticon-star-o" style="margin-right: 8px;"></i> 156</ng-template>
+          <ng-template #likeAction><i class="anticon anticon-like-o" style="margin-right: 8px;"></i> 156</ng-template>
+          <ng-template #msgAction><i class="anticon anticon-message" style="margin-right: 8px;"></i> 2</ng-template>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
+  </nz-card>
+</div>

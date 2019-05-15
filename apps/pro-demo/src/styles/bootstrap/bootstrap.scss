@@ -1,0 +1,30 @@
+
+$font-size-base: 0.875rem;
+
+@import '~bootstrap/scss/bootstrap';
+
+a:not([href]):not([tabindex]) {
+    // color: inherit;
+    color: #007bff;
+    text-decoration: none;
+    
+    &:hover {
+        color: #0056b3;
+        // text-decoration: underline;
+    }
+}
+
+a {
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+ol, ul, dl {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+label {
+    margin-bottom: 0;
+}

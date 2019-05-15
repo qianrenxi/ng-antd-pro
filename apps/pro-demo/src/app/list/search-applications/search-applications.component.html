@@ -1,0 +1,83 @@
+<div class="page-content">
+  <nz-card>
+    <div>
+      所属类目：
+    </div>
+    <div>
+      其他选项:
+    </div>
+  </nz-card>
+
+  <nz-list [nzDataSource]="list" [nzRenderItem]="item" [nzGrid]="{gutter: 16, xs: 24, sm: 12, md: 8, lg: 8, xl: 6 }" class="mt-4">
+    <ng-template #item let-item>
+      <nz-list-item [nzContent]="listItemContent">
+        <ng-template #listItemContent>
+          <nz-card [nzActions]="[actionDownload,actionEdit,actionShare,actionEllipsis]">
+            <nz-card-meta [nzTitle]="item.title" [nzAvatar]="avatarTemplate">
+              <ng-template #avatarTemplate>
+                <nz-avatar [nzSrc]="item.avatar" nzSize="small"></nz-avatar>
+              </ng-template>
+            </nz-card-meta>
+
+            <div>
+              <div class="card-info">
+                <div>
+                  <p>活跃用户</p>
+                  <p>{{item.activeUser}}</p><!-- 添加数量单位输出通道 pipe，比如此的 n 万 -->
+                </div>
+                <div>
+                  <p>新增用户</p>
+                  <p>{{item.newUser}}</p>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #actionDownload>
+              <span nz-tooltip="下载">
+                <i class="anticon anticon-download"></i>
+              </span>
+            </ng-template>
+            <ng-template #actionEdit>
+              <span nz-tooltip="修改">
+                <i class="anticon anticon-edit"></i>
+              </span>
+            </ng-template>
+            <ng-template #actionShare>
+              <span nz-tooltip="分享">
+                <i class="anticon anticon-share-alt"></i>
+              </span>
+            </ng-template>
+            <ng-template #actionEllipsis>
+              <nz-dropdown>
+                <span nz-dropdown>
+                  <i class="anticon anticon-ellipsis"></i>
+                </span>
+                <ul nz-menu nzSelectable>
+                  <li nz-menu-item>
+                    <a>1st menu item</a>
+                  </li>
+                  <li nz-menu-item>
+                    <a>2nd menu item</a>
+                  </li>
+                  <li nz-menu-item>
+                    <a>3rd menu item</a>
+                  </li>
+                </ul>
+              </nz-dropdown>
+            </ng-template>
+          </nz-card>
+        </ng-template>
+      </nz-list-item>
+    </ng-template>
+  </nz-list>
+
+</div>
+
+<ng-template #cardInfo let-title="title" let-value="value">
+  <div class="card-info">
+    <div>
+      <p>{{title}}</p>
+      <p>{{value}}</p>
+    </div>
+  </div>
+</ng-template>

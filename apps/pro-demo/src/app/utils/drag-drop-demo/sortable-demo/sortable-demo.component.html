@@ -1,0 +1,16 @@
+<div class="demo">
+
+    <ul class="funcs-menu">
+      <li><a [routerLink]="['default']" routerLinkActive="active" >Default functionality</a></li>
+      <li><a [routerLink]="['connect-lists']" routerLinkActive="active" >Connect lists</a></li>
+      <li><a [routerLink]="['asgrid']" routerLinkActive="active" >Display as grid</a></li>
+      <li><a [routerLink]="['placeholder']" routerLinkActive="active" >Drop placeholder</a></li>
+      <li><a [routerLink]="['handle-empty']" routerLinkActive="active" >Handle empty lists</a></li>
+      <li><a [routerLink]="['filter-items']" routerLinkActive="active" >Include / exclude items</a></li>
+      <li><a [routerLink]="['portlets']" routerLinkActive="active" >Portlets</a></li>
+    </ul>
+  
+    <div class="viewport">
+      <router-outlet></router-outlet>
+    </div>
+  </div>

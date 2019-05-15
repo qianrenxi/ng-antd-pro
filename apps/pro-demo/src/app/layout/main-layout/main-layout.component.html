@@ -1,0 +1,42 @@
+<nz-layout class="main-layout">
+  <nz-sider [nzCollapsible]="true" [nzWidth]="256" [nzCollapsedWidth]="64">
+    <div class="logo"></div>
+    <div style="position: absolute; top: 64px; left: 0; right: 0; bottom: 0; left: 0; overflow: auto;">
+      <ng-container [ngTemplateOutlet]="menu"></ng-container>
+    </div>
+  </nz-sider>
+  <nz-layout class="main-layout-content">
+    <nz-header>
+      <demo-layout-header></demo-layout-header>
+    </nz-header>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+    <nz-footer>
+      <demo-layout-footer></demo-layout-footer>
+    </nz-footer>
+  </nz-layout>
+</nz-layout>
+
+<ng-template #menu>
+  <ul nz-menu [nzMode]="'inline'" nzTheme="dark">
+    <ng-container *ngFor="let item of menuData">
+      <li nz-menu-item *ngIf="!item.children" [routerLink]="['/', item.path]">{{item.name}}</li>
+      <li nz-submenu *ngIf="item.children">
+        <span title>{{item.name}}</span>
+        <ul>
+          <ng-container *ngFor="let sub of item.children">
+            <li nz-menu-item *ngIf="!sub.children" [routerLink]="['/', item.path, sub.path]">{{sub.name}}</li>
+            <li nz-submenu *ngIf="sub.children">
+              <span title>{{item.name}}</span>
+              <ul>
+                <li nz-menu-item *ngFor="let gs of sub.children" [routerLink]="['/', item.path, sub.path, gs.path]">{{gs.name}}</li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
+
+  </ul>
+</ng-template>

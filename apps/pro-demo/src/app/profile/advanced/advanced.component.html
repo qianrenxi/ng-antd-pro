@@ -1,0 +1,234 @@
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '详情页'}, {label: '高级详情页'}]" title="单号：234231029431" [tabs]="[{label: '详情'}, {label: '规则'}]">
+  <ng-template #logo>
+    <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" width="28" />
+  </ng-template>
+  <ng-template #actions>
+    <nz-button-group>
+      <button nz-button>操 作</button>
+      <button nz-button>操 作</button>
+      <nz-dropdown nzPlacement="bottomRight">
+        <button nz-button nz-dropdown> <i class="anticon anticon-ellipsis"></i> </button>
+        <ul nz-menu>
+          <li nz-menu-item>选项一</li>
+          <li nz-menu-item>选项二</li>
+          <li nz-menu-item>选项三</li>
+        </ul>
+      </nz-dropdown>
+    </nz-button-group>
+    <button nz-button nzType="primary" class="ml-2">主操作</button>
+  </ng-template>
+  <ng-template #content>
+    <np-desc-list class="header-desc-list" [nzGrid]="{gutter: 16, column: 12 }">
+      <np-desc term="创建人">曲丽丽</np-desc>
+      <np-desc term="订购产品">XX 服务</np-desc>
+      <np-desc term="创建时间">2017-07-07</np-desc>
+      <np-desc term="关联单据">
+        <a href="">12421</a>
+      </np-desc>
+      <np-desc term="生效日期">2017-07-07 ~ 2017-08-08</np-desc>
+      <np-desc term="备注">请于两个工作日内确认</np-desc>
+    </np-desc-list>
+  </ng-template>
+  <ng-template #contentExtra>
+    <nz-row>
+      <nz-col [nzXs]="24" [nzSm]="12">
+        <div class="text-secondary">状态</div>
+        <div class="heading">待审批</div>
+      </nz-col>
+      <nz-col [nzXs]="24" [nzSm]="12">
+        <div class="text-secondary">订单金额</div>
+        <div class="heading">¥ 568.08</div>
+      </nz-col>
+    </nz-row>
+  </ng-template>
+</np-page-header>
+
+<div class="page-content">
+  <nz-card nzTitle="流程进度" class="mb-4">
+    <ng-container [ngTemplateOutlet]="fllowProgressTpl"></ng-container>
+  </nz-card>
+
+  <nz-card nzTitle="用户信息" class="mb-4">
+    <ng-container [ngTemplateOutlet]="profileInfoTpl"></ng-container>
+  </nz-card>
+
+  <nz-card nzTitle="用户近半年来电记录" class="mb-4">
+    <div class="no-data">
+      <i class="anticon anticon-frown-o"></i>
+      暂无数据
+    </div>
+  </nz-card>
+
+  <nz-card>
+    <nz-card-tab>
+      <nz-tabset nzSize="large" [(nzSelectedIndex)]="currentOperationTab">
+        <nz-tab nzTitle="操作日志一"></nz-tab>
+        <nz-tab nzTitle="操作日志二"></nz-tab>
+        <nz-tab nzTitle="操作日志三"></nz-tab>
+      </nz-tabset>
+    </nz-card-tab>
+    <ng-container [ngTemplateOutlet]="[userOperateTable1, userOperateTable2, userOperateTable3][currentOperationTab]"></ng-container>
+  </nz-card>
+</div>
+
+<ng-template #fllowProgressTpl>
+  <nz-steps [nzCurrent]="1" nzSize="small" nzProgressDot>
+    <nz-step [nzTitle]="'创建项目'" [nzDescription]="tplStepDesc1">
+      <ng-template #tplStepDesc1>
+        <div style="font-size: 12px; color: rgba(0, 0, 0, 0.45); position: relative; left: 42px;">
+          <div style="margin: 8px 0 4px;">
+            曲丽丽 <i class="anticon anticon-dingding0-o"></i>
+          </div>
+          <div>2016-12-12 12:32</div>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'部门初审'" [nzDescription]="tplStepDesc2">
+      <ng-template #tplStepDesc2>
+        <div style="font-size: 12px; color: rgba(0, 0, 0, 0.45); position: relative; left: 42px;">
+          <div style="margin: 8px 0 4px;">
+            曲丽丽 <i class="anticon anticon-dingding-o" style="color: #00A0E9;"></i>
+          </div>
+          <div><a href="javascript:;">催一下</a></div>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'财务复核'" [nzDescription]="''"></nz-step>
+    <nz-step [nzTitle]="'完成'" [nzDescription]="''"></nz-step>
+  </nz-steps>
+</ng-template>
+
+<ng-template #profileInfoTpl>
+  <np-desc-list class="mb-4" [nzGrid]="{gutter: 16, column: 8 }">
+    <np-desc term="用户姓名">付小小</np-desc>
+    <np-desc term="会员卡号">32943898021309809423</np-desc>
+    <np-desc term="身份证">3321944288191034921</np-desc>
+    <np-desc term="联系方式">18112345678</np-desc>
+    <np-desc term="联系地址">
+      曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
+    </np-desc>
+  </np-desc-list>
+  <np-desc-list title="信息组" class="mb-4" [nzGrid]="{gutter: 16, column: 8 }">
+    <np-desc term="某某数据">725</np-desc>
+    <np-desc term="该数据更新时间">2017-08-08</np-desc>
+    <np-desc>&nbsp;</np-desc>
+    <!-- <np-desc
+          term={
+            <span>
+              某某数据
+              <Tooltip title="数据说明">
+                <Icon
+                  style={{ color: 'rgba(0, 0, 0, 0.43)', marginLeft: 4 }}
+                  type="info-circle-o"
+                />
+              </Tooltip>
+            </span>
+          }
+        >
+          725
+        </np-desc> -->
+    <np-desc term="该数据更新时间">2017-08-08</np-desc>
+  </np-desc-list>
+
+  <h4 class="mb-3" style="font-size: 1rem;">信息组</h4>
+  <nz-card nzTitle="多层级信息组" nzType="inner">
+    <np-desc-list size="small" class="mb-2" title="组名称" [nzGrid]="{gutter: 16, column: 8 }">
+      <np-desc term="负责人">林东东</np-desc>
+      <np-desc term="角色码">1234567</np-desc>
+      <np-desc term="所属部门">XX公司 - YY部</np-desc>
+      <np-desc term="过期时间">2017-08-08</np-desc>
+      <np-desc term="描述">
+        这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+      </np-desc>
+    </np-desc-list>
+    <nz-divider></nz-divider>
+    <np-desc-list size="small" class="mb-2" title="组名称" col="1" [nzGrid]="{gutter: 16, column: 24 }">
+      <np-desc term="学名">
+        Citrullus lanatus (Thunb.) Matsum. et Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
+      </np-desc>
+    </np-desc-list>
+    <nz-divider></nz-divider>
+    <np-desc-list size="small" title="组名称" [nzGrid]="{gutter: 16, column: 8 }">
+      <np-desc term="负责人">付小小</np-desc>
+      <np-desc term="角色码">1234568</np-desc>
+    </np-desc-list>
+  </nz-card>
+</ng-template>
+
+<ng-template #userOperateTable1>
+  <nz-table #nzTable [nzData]="operations?.advancedOperation1" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th>操作类型</th>
+        <th>操作人</th>
+        <th>执行结果</th>
+        <th>操作时间</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of nzTable.data">
+        <td>{{i.type}}</td>
+        <td>{{i.name}}</td>
+        <td>
+            <nz-badge [nzStatus]="statusMap[i.status].type"></nz-badge>
+            {{statusMap[i.status].label}}
+        </td>
+        <td>{{i.updatedAt}}</td>
+        <td>{{i.memo}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
+
+<ng-template #userOperateTable2>
+    <nz-table #nzTable [nzData]="operations?.advancedOperation2" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>操作类型</th>
+            <th>操作人</th>
+            <th>执行结果</th>
+            <th>操作时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of nzTable.data">
+            <td>{{i.type}}</td>
+            <td>{{i.name}}</td>
+            <td>
+              <nz-badge [nzStatus]="statusMap[i.status].type"></nz-badge>
+              {{statusMap[i.status].label}}
+            </td>
+            <td>{{i.updatedAt}}</td>
+            <td>{{i.memo}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+</ng-template>
+
+<ng-template #userOperateTable3>
+    <nz-table #nzTable [nzData]="operations?.advancedOperation3" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>操作类型</th>
+            <th>操作人</th>
+            <th>执行结果</th>
+            <th>操作时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of nzTable.data">
+            <td>{{i.type}}</td>
+            <td>{{i.name}}</td>
+            <td>
+                <nz-badge [nzStatus]="statusMap[i.status].type"></nz-badge>
+                {{statusMap[i.status].label}}
+            </td>
+            <td>{{i.updatedAt}}</td>
+            <td>{{i.memo}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+</ng-template>

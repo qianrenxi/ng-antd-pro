@@ -50,7 +50,7 @@
       "root": "apps/pro-demo/",
       "sourceRoot": "apps/pro-demo/src",
       "projectType": "application",
-      "prefix": "npd",
+      "prefix": "demo",
       "schematics": {
         "@nrwl/schematics:component": {
           "style": "scss"
@@ -69,7 +69,11 @@
               "apps/pro-demo/src/favicon.ico",
               "apps/pro-demo/src/assets"
             ],
-            "styles": ["apps/pro-demo/src/styles.scss"],
+            "styles": [
+              "apps/pro-demo/src/styles/antd/theme.less",
+              "apps/pro-demo/src/styles/bootstrap/bootstrap.scss",
+              "apps/pro-demo/src/styles.scss"
+            ],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -103,7 +107,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pro-demo:build"
+            "browserTarget": "pro-demo:build",
+            "port": 4001,
+            "proxyConfig": "apps/pro-demo/proxy.conf.json"
           },
           "configurations": {
             "production": {
