@@ -27,15 +27,26 @@
     "help": "./node_modules/.bin/nx help"
   },
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@angular/compiler": "^7.2.15",
+    "@angular/core": "^7.2.15"
+  },
   "devDependencies": {
+    "@angular-devkit/build-ng-packagr": "^0.13.9",
     "@angular/cli": "7.3.1",
+    "@angular/compiler-cli": "^7.2.15",
+    "@nrwl/builders": "7.8.0",
     "@nrwl/schematics": "7.8.0",
+    "@types/jest": "24.0.9",
     "@types/node": "~8.9.4",
     "dotenv": "6.2.0",
+    "jest": "24.1.0",
+    "jest-preset-angular": "7.0.0",
+    "ng-packagr": "^5.1.0",
+    "prettier": "1.15.2",
     "ts-node": "~7.0.0",
+    "tslib": "^1.9.3",
     "tslint": "~5.11.0",
-    "typescript": "3.2.2",
-    "prettier": "1.15.2"
+    "typescript": "3.2.2"
   }
 }

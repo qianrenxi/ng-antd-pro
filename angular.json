@@ -2,7 +2,51 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "",
-  "projects": {},
+  "projects": {
+    "ng-antd-pro": {
+      "root": "libs/ng-antd-pro",
+      "sourceRoot": "libs/ng-antd-pro/src",
+      "projectType": "library",
+      "prefix": "np",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/ng-antd-pro/tsconfig.lib.json",
+            "project": "libs/ng-antd-pro/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "libs/ng-antd-pro/ng-package.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ng-antd-pro/tsconfig.lib.json",
+              "libs/ng-antd-pro/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/ng-antd-pro/jest.config.js",
+            "tsConfig": "libs/ng-antd-pro/tsconfig.spec.json",
+            "setupFile": "libs/ng-antd-pro/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    }
+  },
   "cli": {
     "warnings": {
       "typescriptMismatch": false,
@@ -17,5 +61,6 @@
     "@nrwl/schematics:library": {
       "style": "scss"
     }
-  }
+  },
+  "defaultProject": "ng-antd-pro"
 }
