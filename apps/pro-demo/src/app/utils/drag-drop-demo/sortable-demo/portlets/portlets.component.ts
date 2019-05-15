@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DraggableDirective } from '../../../drag-drop/directives/draggable.directive';
-import { moveItemInArray } from '../../../drag-drop/drag-utils';
+import { DraggableDirective, moveItemInArray } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-portlets',
+  selector: 'demo-portlets',
   templateUrl: './portlets.component.html',
   styleUrls: ['./portlets.component.scss']
 })

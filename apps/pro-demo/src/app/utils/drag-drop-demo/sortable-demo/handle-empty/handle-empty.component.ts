@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { moveItemInArray } from 'src/app/drag-drop/drag-utils';
+import { moveItemInArray } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-handle-empty',
+  selector: 'demo-handle-empty',
   templateUrl: './handle-empty.component.html',
   styleUrls: ['./handle-empty.component.scss']
 })

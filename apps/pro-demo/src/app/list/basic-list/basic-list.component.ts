@@ -9,7 +9,7 @@ import { FakeApiService } from '../../api-service/fake-api.service';
 export class BasicListComponent implements OnInit {
   filterStatus = 'A';
 
-  list: any[];
+  list: any[] = [];
   pagination: any;
 
   constructor(

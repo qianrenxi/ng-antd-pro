@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { moveItemInArray } from 'src/app/drag-drop/drag-utils';
+import { moveItemInArray } from '@qianrenxi/ng-antd-pro';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'np-connect-lists',
+  selector: 'demo-connect-lists',
   templateUrl: './connect-lists.component.html',
   styleUrls: ['./connect-lists.component.scss']
 })

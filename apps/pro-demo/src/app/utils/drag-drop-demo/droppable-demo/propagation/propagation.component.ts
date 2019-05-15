@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'np-propagation',
+  selector: 'demo-propagation',
   templateUrl: './propagation.component.html',
   styleUrls: ['./propagation.component.scss']
 })

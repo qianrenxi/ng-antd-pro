@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DragReleaseEvent } from '../../../drag-drop';
+import { DragReleaseEvent } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-revert-position',
+  selector: 'demo-revert-position',
   templateUrl: './revert-position.component.html',
   styleUrls: ['./revert-position.component.scss']
 })

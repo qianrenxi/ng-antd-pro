@@ -11,7 +11,7 @@ import { PortletsComponent } from './portlets/portlets.component';
 
 const routes: Routes = [
   {
-    path: 'sortable', component: SortableDemoComponent, children: [
+    path: '', component: SortableDemoComponent, children: [
       { path: '', redirectTo: 'default', pathMatch: 'full' },
       { path: 'default', component: DefaultComponent },
       { path: 'connect-lists', component: ConnectListsComponent },

@@ -4,7 +4,7 @@ import { SplitterComponent } from './splitter/splitter.component';
 
 
 const routes: Routes = [
-  { path: 'dragDrop', loadChildren: "app/utils/drag-drop-demo/drag-drop-demo#DragDropDemoModule" },
+  { path: 'dragDrop', loadChildren: "./drag-drop-demo/drag-drop-demo.module#DragDropDemoModule" },
   { path: 'splitter', component: SplitterComponent }
 ];
 

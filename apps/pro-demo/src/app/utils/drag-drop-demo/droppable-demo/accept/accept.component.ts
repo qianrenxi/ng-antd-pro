@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-accept',
+  selector: 'demo-accept',
   templateUrl: './accept.component.html',
   styleUrls: ['./accept.component.scss']
 })

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-handles',
+  selector: 'demo-handles',
   templateUrl: './handles.component.html',
   styleUrls: ['./handles.component.scss']
 })

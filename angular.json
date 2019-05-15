@@ -28,7 +28,9 @@
               "libs/ng-antd-pro/tsconfig.lib.json",
               "libs/ng-antd-pro/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -67,7 +69,12 @@
             "tsConfig": "apps/pro-demo/tsconfig.app.json",
             "assets": [
               "apps/pro-demo/src/favicon.ico",
-              "apps/pro-demo/src/assets"
+              "apps/pro-demo/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "apps/pro-demo/src/styles/antd/theme.less",
@@ -130,7 +137,9 @@
               "apps/pro-demo/tsconfig.app.json",
               "apps/pro-demo/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -165,7 +174,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/pro-demo-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -191,9 +202,16 @@
             "tsConfig": "apps/pro-site/tsconfig.app.json",
             "assets": [
               "apps/pro-site/src/favicon.ico",
-              "apps/pro-site/src/assets"
+              "apps/pro-site/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
-            "styles": ["apps/pro-site/src/styles.scss"],
+            "styles": [
+              "apps/pro-site/src/styles.scss"
+            ],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -248,7 +266,9 @@
               "apps/pro-site/tsconfig.app.json",
               "apps/pro-site/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -283,7 +303,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/pro-site-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }

@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, HostBinding, Input, ContentChildren, QueryList, HostListener, AfterViewInit, AfterContentInit, EventEmitter, AfterViewChecked } from '@angular/core';
 import { GridItemComponent } from '../grid-item/grid-item.component';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/debounce';
 import { GridLayoutService } from '../grid-layout.service';
 
 @Component({

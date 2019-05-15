@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DragStartEvent, DragReleaseEvent, DragEndEvent, DragEnterEvent, DragExitEvent, DragDropEvent, DragMoveEvent } from '../../../drag-drop';
+import { DragStartEvent, DragReleaseEvent, DragEndEvent, DragEnterEvent, DragExitEvent, DragDropEvent, DragMoveEvent } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-default-func',
+  selector: 'demo-default-func',
   templateUrl: './default-func.component.html',
   styleUrls: ['./default-func.component.scss']
 })

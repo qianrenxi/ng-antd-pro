@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-constrain-movement',
+  selector: 'demo-constrain-movement',
   templateUrl: './constrain-movement.component.html',
   styleUrls: ['./constrain-movement.component.scss']
 })

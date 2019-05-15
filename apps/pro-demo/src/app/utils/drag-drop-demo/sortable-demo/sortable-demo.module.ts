@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DragDropModule } from '../../drag-drop/drag-drop.module';
+import { DragDropModule } from '@qianrenxi/ng-antd-pro';
 import { SortableDemoRoutingModule } from './sortable-demo-routing.module';
 import { SortableDemoComponent } from './sortable-demo.component';
 import { DefaultComponent } from './default/default.component';

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { moveItemInArray } from 'src/app/drag-drop/drag-utils';
+import { moveItemInArray } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-placeholder',
+  selector: 'demo-placeholder',
   templateUrl: './placeholder.component.html',
   styleUrls: ['./placeholder.component.scss']
 })

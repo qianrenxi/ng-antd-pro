@@ -10,7 +10,7 @@ import { VisualFeedbackComponent } from './visual-feedback/visual-feedback.compo
 
 const routes: Routes = [
     {
-        path: 'droppable', component: DroppableDemoComponent, children: [
+        path: '', component: DroppableDemoComponent, children: [
             { path: '', redirectTo: 'default', pathMatch: 'full' },
             { path: 'default', component: DefaultComponent },
             { path: 'accept', component: AcceptComponent },

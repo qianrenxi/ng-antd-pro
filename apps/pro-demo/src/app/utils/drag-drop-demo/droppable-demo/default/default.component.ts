@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-default',
+  selector: 'demo-default',
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss']
 })

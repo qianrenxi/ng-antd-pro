@@ -8,7 +8,7 @@ import { RuleApiService } from '../../api-service/rule-api.service';
 })
 export class TableListComponent implements OnInit {
 
-  list: any[];
+  list: any[] = [];
   pagination: any;
 
   statusMap = ['default', 'processing', 'success', 'error'];

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-revert',
+  selector: 'demo-revert',
   templateUrl: './revert.component.html',
   styleUrls: ['./revert.component.scss']
 })

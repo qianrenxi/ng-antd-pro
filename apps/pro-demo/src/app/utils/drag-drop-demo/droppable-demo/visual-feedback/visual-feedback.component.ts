@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-visual-feedback',
+  selector: 'demo-visual-feedback',
   templateUrl: './visual-feedback.component.html',
   styleUrls: ['./visual-feedback.component.scss']
 })

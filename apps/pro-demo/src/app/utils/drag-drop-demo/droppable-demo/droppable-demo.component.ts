@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'np-droppable-demo',
+  selector: 'demo-droppable-demo',
   templateUrl: './droppable-demo.component.html',
   styleUrls: ['./droppable-demo.component.scss']
 })

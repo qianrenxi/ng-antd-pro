@@ -77,7 +77,7 @@
       <ng-template #tplStepDesc1>
         <div style="font-size: 12px; color: rgba(0, 0, 0, 0.45); position: relative; left: 42px;">
           <div style="margin: 8px 0 4px;">
-            曲丽丽 <i class="anticon anticon-dingding0-o"></i>
+            曲丽丽 <i class="anticon anticon-dingding-o"></i>
           </div>
           <div>2016-12-12 12:32</div>
         </div>
@@ -156,7 +156,7 @@
 </ng-template>
 
 <ng-template #userOperateTable1>
-  <nz-table #nzTable [nzData]="operations?.advancedOperation1" [nzShowPagination]="false">
+  <nz-table #nzTable [nzData]="operations?.advancedOperation1 || []" [nzShowPagination]="false">
     <thead>
       <tr>
         <th>操作类型</th>
@@ -182,7 +182,7 @@
 </ng-template>
 
 <ng-template #userOperateTable2>
-    <nz-table #nzTable [nzData]="operations?.advancedOperation2" [nzShowPagination]="false">
+    <nz-table #nzTable [nzData]="operations?.advancedOperation2 || []" [nzShowPagination]="false">
         <thead>
           <tr>
             <th>操作类型</th>
@@ -208,7 +208,7 @@
 </ng-template>
 
 <ng-template #userOperateTable3>
-    <nz-table #nzTable [nzData]="operations?.advancedOperation3" [nzShowPagination]="false">
+    <nz-table #nzTable [nzData]="operations?.advancedOperation3 || []" [nzShowPagination]="false">
         <thead>
           <tr>
             <th>操作类型</th>

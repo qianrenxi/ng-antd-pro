@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DroppableDemoComponent } from './droppable-demo.component';
-import { DragDropModule } from '../../drag-drop/drag-drop.module';
+import { DragDropModule } from '@qianrenxi/ng-antd-pro';
 import { DroppableDemoRoutingModule } from './doppable-demo-routing.module';
 import { DefaultComponent } from './default/default.component';
 import { AcceptComponent } from './accept/accept.component';

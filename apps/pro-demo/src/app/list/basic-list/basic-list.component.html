@@ -27,7 +27,7 @@
       </nz-input-group>
     </ng-template>
 
-    <button nz-button nzType="dashed" class="w-100"><i class="anticon anticon-plus"></i> 添加</button>
+    <button nz-button nzType="dashed" class="w-100"><i nz-icon nzType="plus" nzTheme="outline"></i> 添加</button>
 
     <nz-list [nzDataSource]="list" [nzRenderItem]="item" [nzPagination]="pagination" class="mt-3">
       <ng-template #item let-i>

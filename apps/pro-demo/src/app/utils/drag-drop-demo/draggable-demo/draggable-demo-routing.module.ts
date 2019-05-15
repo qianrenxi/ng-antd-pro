@@ -9,7 +9,7 @@ import { RevertPositionComponent } from './revert-position/revert-position.compo
 
 const routes: Routes = [
     {
-        path: 'draggable', component: DraggableDemoComponent, children: [
+        path: '', component: DraggableDemoComponent, children: [
             { path: '', redirectTo: 'default', pathMatch: 'full' },
             { path: 'default', component: DefaultFuncComponent },
             { path: 'constrain', component: ConstrainMovementComponent },

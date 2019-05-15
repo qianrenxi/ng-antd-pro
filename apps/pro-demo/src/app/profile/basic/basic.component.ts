@@ -8,8 +8,8 @@ import { ProfileApiService } from '../../api-service/profile-api.service';
 })
 export class BasicComponent implements OnInit {
 
-  returnedGoods;
-  returnedProgress;
+  returnedGoods = [];
+  returnedProgress = [];
 
   statusMap = {'default': '关闭', 'processing': '运行中', 'success': '已上线', 'error': '异常'};
 

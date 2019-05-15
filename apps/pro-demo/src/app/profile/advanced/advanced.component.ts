@@ -8,7 +8,7 @@ import { ProfileApiService } from '../../api-service/profile-api.service';
 })
 export class AdvancedComponent implements OnInit {
 
-  operations;
+  operations = [];
   currentOperationTab = 0;
   statusMap = { 'agree': { type: 'success', label: '成功' }, 'reject': { type: 'error', label: '驳回' } };
 

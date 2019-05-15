@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { moveItemInArray } from 'src/app/drag-drop/drag-utils';
+import { moveItemInArray } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-filter-items',
+  selector: 'demo-filter-items',
   templateUrl: './filter-items.component.html',
   styleUrls: ['./filter-items.component.scss']
 })

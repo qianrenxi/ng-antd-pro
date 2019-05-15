@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DragStartEvent, DragReleaseEvent, DragEndEvent, DragEnterEvent, DragExitEvent, DragDropEvent, DragMoveEvent } from '../../../drag-drop';
+import { DragStartEvent, DragReleaseEvent, DragEndEvent, DragEnterEvent, DragExitEvent, DragDropEvent, DragMoveEvent } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-events',
+  selector: 'demo-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })

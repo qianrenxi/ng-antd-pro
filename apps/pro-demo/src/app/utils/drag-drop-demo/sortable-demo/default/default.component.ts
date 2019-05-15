@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { moveItemInArray } from '../../../drag-drop/drag-utils';
+import { moveItemInArray } from '@qianrenxi/ng-antd-pro';
 
 @Component({
-  selector: 'np-default',
+  selector: 'demo-default',
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss']
 })
