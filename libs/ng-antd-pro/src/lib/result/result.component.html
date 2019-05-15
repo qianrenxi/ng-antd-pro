@@ -1,0 +1,21 @@
+<div class="result">
+  <div class="icon">
+    <i [class]="iconMap[type]"></i>
+  </div>
+  <div class="title" *ngIf="title">
+    <ng-container *ngIf="!tplTitle">{{title}}</ng-container>
+    <ng-container *ngIf="tplTitle" [ngTemplateOutlet]="tplTitle"></ng-container>
+  </div>
+  <div class="description" *ngIf="showDescription">
+    <ng-container *ngIf="!tplDescription">{{description}}</ng-container>
+    <ng-container *ngIf="tplDescription" [ngTemplateOutlet]="tplDescription"></ng-container>
+  </div>
+  <div class="extra" *ngIf="showExtra">
+    <ng-container *ngIf="!tplExtra">{{extra}}</ng-container>
+    <ng-container *ngIf="tplExtra" [ngTemplateOutlet]="tplExtra"></ng-container>
+  </div>
+  <div class="actions" *ngIf="showActions">
+    <ng-container *ngIf="!tplActions">{{actions}}</ng-container>
+    <ng-container *ngIf="tplActions" [ngTemplateOutlet]="tplActions"></ng-container>
+  </div>
+</div>

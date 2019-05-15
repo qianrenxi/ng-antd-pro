@@ -1,0 +1,7 @@
+= Grid Layout 
+
+栅格化布局系统，实现思路和作用参考： http://packery.metafizzy.co/[Packery] 或 http://dsmorse.github.io/gridster.js/[Gridster] 或 https://github.com/STRML/react-grid-layout[React-Grid-Layout]。
+
+它是一个可以通过拖拽实现自定义布局的偏用户化的布局系统，和我们常用的grid布局的区别是：
+1. balabala
+2. balabala

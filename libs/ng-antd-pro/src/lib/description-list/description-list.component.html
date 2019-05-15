@@ -1,0 +1,26 @@
+<ng-template #itemsTpl>
+  <ng-container *ngFor="let item of children">
+    <div class="description">
+      <div class="term">{{item.term}}</div>
+      <div class="detail">
+        <ng-template [ngTemplateOutlet]="item.template"></ng-template>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<div class="description-list">
+  <div class="title" *ngIf="title">{{title}}</div>
+  <nz-row *ngIf="nzGrid; else itemsTpl" [nzGutter]="nzGrid.gutter">
+    <!-- children -->
+    <!-- <ng-content></ng-content> -->
+    <nz-col *ngFor="let item of children" [nzSpan]="nzGrid.column" [nzXs]="nzGrid.xs" [nzSm]="nzGrid.sm" [nzMd]="nzGrid.md" [nzLg]="nzGrid.lg" [nzXl]="nzGrid.xl" [nzXXl]="nzGrid.xxl">
+      <div class="description">
+        <div class="term">{{item.term}}</div>
+        <div class="detail">
+          <ng-template [ngTemplateOutlet]="item.template"></ng-template>
+        </div>
+      </div>
+    </nz-col>
+  </nz-row>
+</div>

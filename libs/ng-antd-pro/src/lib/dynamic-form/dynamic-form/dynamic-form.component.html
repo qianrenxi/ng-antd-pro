@@ -1,0 +1,47 @@
+<form nz-form [formGroup]="formGroup" (ngSubmit)="_submitForm($event, formGroup.value)">
+
+  <nz-row *ngIf="nzGrid; else formItemsTpl" [nzGutter]="nzGrid.gutter || 16">
+    <nz-col *ngFor="let field of fields" [nzSpan]="nzGrid.column" [nzXs]="nzGrid.xs" [nzSm]="nzGrid.sm" [nzMd]="nzGrid.md" [nzLg]="nzGrid.lg"
+      [nzXl]="nzGrid.xl" [nzXXl]="nzGrid.xxl">
+      <ng-container *ngTemplateOutlet="formItemTpl; context: {$implicit: field, flex: true}"></ng-container>
+    </nz-col>
+  </nz-row>
+  <ng-template #formItemsTpl>
+    <ng-container *ngFor="let field of fields">
+      <ng-container *ngTemplateOutlet="formItemTpl; context: {$implicit: field}"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <nz-form-item *ngIf="!!actions && actions.length > 0">
+    <nz-form-control [nzSpan]="itemGrid?.control" [nzOffset]="itemGrid?.label">
+      <ng-container *ngFor="let action of actions" [ngTemplateOutlet]="action"></ng-container>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<ng-template #formItemTpl let-field let-flex="flex">
+  <nz-form-item [nzFlex]="!!flex" [formGroup]="field.formGroup">
+    <nz-form-label [nzFor]="field.key" [nzRequired]="field.required" [nzSpan]="itemGrid?.label">{{field.label || field.key}}</nz-form-label>
+    <nz-form-control [nzSpan]="itemGrid?.control">
+      <div [ngSwitch]="field.controlType">
+        <div *ngSwitchCase="'text'">
+          <input nz-input [formControlName]="field.key" [placeholder]="field.placeholder || ''">
+        </div>
+        <div *ngSwitchCase="'dropdown'">
+          <nz-select [formControlName]="field.key" [nzPlaceHolder]="field.placeholder || ''" nzAllowClear style="min-width: 100px;">
+            <nz-option *ngFor="let item of field.options" [nzLabel]="item.value" [nzValue]="item.key" [nzDisabled]="item.disabled">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div *ngSwitchCase="'switch'">
+          <nz-switch [formControlName]="field.key"></nz-switch>
+        </div>
+        <div *ngSwitchDefault>Empty Control</div>
+      </div>
+      <!-- <ng-container *ngIf="!!field.explain && hasError(field.key)">
+        <nz-form-explain *ngFor="let err of getErrorArray(field.key)">{{field.explain.errors[err.key]}}</nz-form-explain>
+      </ng-container> 这种写法会出现闪现，多次闪现效果的问题 -->
+      <nz-form-explain *ngIf="field.formGroup.get(field.key).hasError('required')">必填</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+</ng-template>

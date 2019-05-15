@@ -1,0 +1,13 @@
+<div class="exception">
+    <div class="img-block">
+      <div class="img-ele" [style.background-image]="'url(' + (img || config[type]?.img) + ')'"></div>
+    </div>
+    <div class="content">
+      <h1>{{title || config[type]?.title}}</h1>
+      <div class="desc">{{description || config[type]?.desc}}</div>
+      <div class="actions">
+        <ng-container *ngIf="!!actions" [ngTemplateOutlet]="actions"></ng-container>
+        <button *ngIf="!actions" nz-button nzType="primary">返回首页</button>
+      </div>
+    </div>
+  </div>

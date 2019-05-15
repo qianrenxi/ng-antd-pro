@@ -1,0 +1,37 @@
+<nz-breadcrumb *ngIf="showBreadcrumb">
+  <nz-breadcrumb-item *ngFor="let item of breadcrumbs">
+    <a [routerLink]="item.link" *ngIf="item.link"><i *ngIf="item.icon" [class]="'anticon ' + item.icon"></i> {{item.label}}</a>
+    <span *ngIf="!item.link"><i *ngIf="item.icon" [class]="'anticon ' + item.icon"></i> {{item.label}}</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+
+<div class="detail" *ngIf="showDetail">
+  <div class="logo" *ngIf="showLogo">
+    <ng-container [ngTemplateOutlet]="tplLogo"></ng-container>
+  </div>
+  <div class="main">
+    <div class="row" *ngIf="showTitle">
+      <div class="title">
+        <h1 *ngIf="!tplTitle && !!title">{{title}}</h1>
+        <ng-container *ngIf="tplTitle" [ngTemplateOutlet]="tplTitle"></ng-container>
+      </div>
+      <div class="actions">
+        <ng-container [ngTemplateOutlet]="tplActions"></ng-container>
+      </div>
+    </div>
+    <div class="row" *ngIf="showContent">
+      <div class="content">
+        <ng-container *ngIf="!tplContent && !!content">{{content}}</ng-container>
+        <ng-container *ngIf="tplContent" [ngTemplateOutlet]="tplContent"></ng-container>
+      </div>
+      <div class="extra-content" *ngIf="showExtraContent">
+        <ng-container [ngTemplateOutlet]="tplContentExtra"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-tabset *ngIf="showTabs; else tplTabs" (nzSelectChange)="fireTabChange($event)">
+  <nz-tab *ngFor="let item of tabs" [nzTitle]="item.label">
+  </nz-tab>
+</nz-tabset>
