@@ -16,6 +16,12 @@
     },
     "pro-demo-e2e": {
       "tags": []
+    },
+    "pro-site": {
+      "tags": []
+    },
+    "pro-site-e2e": {
+      "tags": []
     }
   }
 }
