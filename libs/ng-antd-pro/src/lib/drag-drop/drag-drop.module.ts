@@ -8,6 +8,7 @@ import { DragPreviewDirective } from './directives/drag-preview.directive';
 import { DroppableDirective } from './directives/droppable.directive';
 import { SortableDirective } from './directives/sortable.directive';
 import { SortableItemDirective } from './directives/sortable-item.directive';
+import { SplitterDirective } from './splitter.directive';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { SortableItemDirective } from './directives/sortable-item.directive';
     DragPreviewDirective,
     DroppableDirective,
     SortableDirective,
-    SortableItemDirective
+    SortableItemDirective,
+    SplitterDirective,
   ],
   exports: [
     DraggableDirective,
@@ -29,7 +31,8 @@ import { SortableItemDirective } from './directives/sortable-item.directive';
     DragPreviewDirective,
     DroppableDirective,
     SortableDirective,
-    SortableItemDirective
+    SortableItemDirective,
+    SplitterDirective,
   ],
   providers: [
     DragDropService,

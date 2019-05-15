@@ -1,8 +1,8 @@
 {
   "extends": "../../tslint.json",
   "rules": {
-    "directive-selector": [true, "attribute", ["np", "ap"], "camelCase"],
-    "component-selector": [true, "element", ["np", "ap"], "kebab-case"]
+    "directive-selector": [true, "attribute", "np", "camelCase"],
+    "component-selector": [true, "element", "np", "kebab-case"]
   },
   "no-input-rename": false,
   "no-output-rename": false,
