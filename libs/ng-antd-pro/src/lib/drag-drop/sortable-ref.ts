@@ -19,7 +19,6 @@ interface CachedItemPosition {
 
 export interface SortableItemRef extends DraggableRef { };
 
-let I = 0;
 export class SortableRef<T = any> {
 
     private _items: SortableItemRef[];
@@ -84,8 +83,6 @@ export class SortableRef<T = any> {
         isPointerOverContainer: boolean
     }>();
 
-    _id = ++I;
-
     constructor(
         public element: ElementRef<HTMLElement> | HTMLElement,
         private _document: Document,
@@ -96,8 +93,6 @@ export class SortableRef<T = any> {
     ) {
         this._anyDragStartSubscription = _dragDropRegistry.startDragging$.subscribe(dragRef => this._anyDragStarted(dragRef));
         this._anyDragStopSubscription = _dragDropRegistry.stopDragging$.subscribe(dragRef => this._anyDragStoped(dragRef));
-
-        (coerceElement(this.element)).append(`${this._id}`);
     }
 
     withItems(items: SortableItemRef[]): this {
