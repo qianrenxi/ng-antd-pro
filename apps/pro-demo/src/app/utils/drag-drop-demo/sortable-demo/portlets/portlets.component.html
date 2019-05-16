@@ -1,6 +1,6 @@
 <h2>Portlets demo</h2>
 <div class="gallery">
-  <ul class="gallery-list regions" npSortable npDragSort="false" npSortConnectWith=".region">
+  <ul class="gallery-list regions" npSortable npDragSort="false" npSortConnectWith=".region, .content-region">
     <li class="gallery-item region" npSortableItem npDragMode="clone" npDragData="Region A">
       Region A
       <div class="item-preview" *npDragPreview>Region A</div>
@@ -11,7 +11,7 @@
       <div class="item-preview" *npDragPreview>Region B</div>
     </li>
   </ul>
-  <ul class="gallery-list items" npSortable npDragSort="false" npSortConnectWith=".region">
+  <ul class="gallery-list items" npSortable npDragSort="false" npSortConnectWith=".region, .content-region">
     <li class="gallery-item item" npSortableItem npDragMode="clone" npDragData="Item 1">
       Item 1
       <div class="item-preview" *npDragPreview>Item 1</div>
@@ -29,12 +29,14 @@
   </div>
 
   <h5 class="help-title">CONTENT-BODY</h5>
-  <div class="content-region">
-    <div class="region row" npSortable (npSortDrop)="onContentRegionDrop($event)">
+  <div class="content-region" npSortable npDragSort="false" style="padding: 8px;">
+    <div class="region region-row" npSortableItem npDragDisabled npSortable  npSortConnectWith=".region, .content-region" (npSortDrop)="onContentRegionDrop($event)">
       <div *ngFor="let item of list2" class="region-widget" npSortableItem [npDragData]="item">
-        {{item}}
-        <div class="item-preview" *npDragPreview>Item 2</div>
+        {{item}} in region
+        <div class="item-preview" *npDragPreview>{{item}} IR.</div>
       </div>
     </div>
+
+    <div class="region region-row" *npDragPlaceholderWrapper>AA</div>
   </div>
 </div>

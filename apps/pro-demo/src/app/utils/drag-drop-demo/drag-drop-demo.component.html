@@ -1,11 +1,5 @@
-<h1>Drag Drop</h1>
-
-<ul class="main-menu">
-  <li><a [routerLink]="['draggable']" routerLinkActive="active">Part I: Draggable</a></li>
-  <li><a [routerLink]="['droppable']" routerLinkActive="active">Part II: Droppable</a></li>
-  <!-- <li><a [routerLink]="['resizable']" routerLinkActive="active">Part III: Resizable</a></li> -->
-  <!-- <li><a [routerLink]="['selectable']" routerLinkActive="active">Part IV: Selectable</a> &nbsp;&nbsp;<a href="http://www.jqueryui.org.cn/demo/5640.html" target="_blank">参考</a></li> -->
-  <li><a [routerLink]="['sortable']" routerLinkActive="active">Part V: Sortable</a></li>
-</ul>
+<np-page-header [breadcrumbs]="[{label: '首页', link: '/'}, {label: '工具'}, {label: '拖拽'}]" title="Drag & Drop" [tabs]="tabs" (tabChange)="tabChange($event)">
+</np-page-header>
 
 <router-outlet></router-outlet>
+

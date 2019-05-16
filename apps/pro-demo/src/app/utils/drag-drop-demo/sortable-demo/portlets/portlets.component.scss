@@ -68,7 +68,8 @@ ul.gallery-list, li.gallery-item {
     }
 }
 
-.row {
+.region-row {
     min-height: 8px;
-    // background: red;
+    background: rgba($color: #2057ee, $alpha: 0.5);
+    border: 1px solid #2057ee;
 }

@@ -1,7 +1,7 @@
-import { ElementRef, NgZone, Renderer2 } from '@angular/core';
+import { ElementRef, NgZone, Renderer2, EmbeddedViewRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DragDropRegistryService } from './drag-drop-registry.service';
-import { DraggableRef } from './draggable-ref';
+import { DraggableRef, DragHelperTemplate } from './draggable-ref';
 import { Subscription, Subject } from 'rxjs';
 import * as _ from 'lodash';
 import { coerceElement } from '@angular/cdk/coercion';
@@ -19,6 +19,7 @@ interface CachedItemPosition {
 
 export interface SortableItemRef extends DraggableRef { };
 
+let I = 0;
 export class SortableRef<T = any> {
 
     private _items: SortableItemRef[];
@@ -26,6 +27,10 @@ export class SortableRef<T = any> {
 
     private _accept: string | ((dragRef, dropRef) => boolean);
     scope: string;
+
+    private _placeholderWrapper: HTMLElement;
+    private _placeholderWrapperRef: EmbeddedViewRef<any> | null;
+    private _placeholderWrapperTemplate?: DragHelperTemplate | null;
 
     private _anyDragStartSubscription: Subscription;
     private _anyDragStopSubscription: Subscription;
@@ -79,6 +84,8 @@ export class SortableRef<T = any> {
         isPointerOverContainer: boolean
     }>();
 
+    _id = ++I;
+
     constructor(
         public element: ElementRef<HTMLElement> | HTMLElement,
         private _document: Document,
@@ -89,6 +96,8 @@ export class SortableRef<T = any> {
     ) {
         this._anyDragStartSubscription = _dragDropRegistry.startDragging$.subscribe(dragRef => this._anyDragStarted(dragRef));
         this._anyDragStopSubscription = _dragDropRegistry.stopDragging$.subscribe(dragRef => this._anyDragStoped(dragRef));
+
+        (coerceElement(this.element)).append(`${this._id}`);
     }
 
     withItems(items: SortableItemRef[]): this {
@@ -107,6 +116,11 @@ export class SortableRef<T = any> {
 
     connectWith(sortables: SortableRef[]): this {
         this._siblings = sortables.slice();
+        return this;
+    }
+
+    withPlaceholderWrapperTemplate(template: DragHelperTemplate | null): this {
+        this._placeholderWrapperTemplate = template;
         return this;
     }
 
@@ -135,11 +149,17 @@ export class SortableRef<T = any> {
         this.deactivated$.next(event);
     }
 
+    isFloating(): boolean {
+        return this.axis === 'x' || (!_.isEmpty(this._items) && this._isFloating(this._items[0].getRootElement()));
+    }
     // contains(target: SortableRef): boolean {
     //     return _.includes(this._childSortables, target);
     // }
 
     enter(event, initContainer) {
+        // this.beforStarted.next();
+        // console.log(this._id, "entered")
+
         // TODO: extract to a method
         const { source, pointerPosition, delta }: { source: SortableItemRef, pointerPosition: Point, delta } = event;
         // const currentItemElement = source.getRootElement();
@@ -149,40 +169,7 @@ export class SortableRef<T = any> {
         // const sizeProperty = floating ? 'width' : 'height';
         // const axis = floating ? 'x' : 'y';
 
-        let itemWithLeastDistance = null;
-        let direction = null;
 
-        // // if (_.isEmpty(this._items) && !this.dropOnEmpty) {  return false; }
-
-        if (!_.isEmpty(this._items)) {
-            this._items.forEach((item, index) => {
-                const itemElement = item.getRootElement();
-                if (!coerceElement(this.element).contains(itemElement)) {
-                    return;
-                }
-
-                if (item === source) {
-                    return;
-                }
-
-                // TODO, 优化定位，解决闪动的问题
-                const intersect = this._intersectsWithPointer(itemElement, pointerPosition, delta);
-
-                if (!intersect) {
-                    return;
-                }
-
-                itemWithLeastDistance = item;
-                direction = intersect === 1 ? 'down' : 'up';
-            });
-        }
-
-        if (itemWithLeastDistance) {
-            this._rearrange(event, direction, itemWithLeastDistance);
-        } else {
-            // 可以解决空容器的问题
-            this._rearrange(event, direction);
-        }
 
         // TODO emit change,
         // TODO shuld emit change after enter, so 应该调整时间及相应处理逻辑的先后顺序
@@ -200,10 +187,10 @@ export class SortableRef<T = any> {
 
             this._dragSubscriptions.push(
                 source.moved.subscribe((event) => {
+                    // console.log(this._id, 'sorting')
                     this._sort(event);
                 }),
                 source.ended.subscribe((event) => {
-                    // console.log("other container catch end", source);
                     this._handleDragEnd(event, initContainer);
                 })
             );
@@ -212,19 +199,21 @@ export class SortableRef<T = any> {
 
     leave(event) {
         this._entered = false;
+        // console.log(this._id, "leaving")
 
         const { source }: { source: SortableItemRef } = event;
         if (!_.includes(this._items, source)) {
             this._removeDragSubscriptions();
+            this._destoryPlaceholderWrapper();
         }
     }
 
     cancel() {
         this._entered = false;
+        this._destoryPlaceholderWrapper();
     }
 
     private _anyDragStarted(dragRef: SortableItemRef) {
-        // console.log('some drag start', dragRef, this._items, _.includes(this._items, dragRef))
         // TODO: fix to accept connected items
         if (!_.includes(this._items, dragRef)) {
             return;
@@ -292,7 +281,6 @@ export class SortableRef<T = any> {
 
         // const currentIndex = _.findIndex(this._itemPositions, (it) => it.item === source);
 
-        // console.log(previousIndex, currentIndex);
     }
 
     private _handleDragEnd(event, initialContainer?) {
@@ -307,7 +295,6 @@ export class SortableRef<T = any> {
             this._siblings.forEach(it => it.markAsDeactivated(event));
         }
 
-        // console.log(previousIndex, currentIndex);
         this.dropped$.next({
             item: source,
             container: this,
@@ -322,6 +309,7 @@ export class SortableRef<T = any> {
                 it.cancel();
             });
         }
+        this._destoryPlaceholderWrapper();
     }
 
     private _contactContainers(event) {
@@ -341,8 +329,6 @@ export class SortableRef<T = any> {
                 return;
             }
 
-            // console.log(pointerPosition)
-            // console.log(index, containerElement.getBoundingClientRect())
             if (this._intersectsWith(containerElement, pointerPosition, delta)) {
                 // If we've already found a container and it's more "inner" than this, then continue
                 if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
@@ -362,6 +348,23 @@ export class SortableRef<T = any> {
 
         if (!innermostContainer) {
             return;
+        } else {
+            containers.forEach((container, index) => {
+                const containerElement = coerceElement(container.element);
+                // Never consider a container that's located within the item itself.
+                if (currentItemElement!.contains(containerElement)) {
+                    return;
+                }
+    
+                if (this._intersectsWith(containerElement, pointerPosition, delta)) {
+                    // If we've already found a container and it's more "inner" than this, then continue
+                    if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
+                        container._destoryPlaceholderWrapper();
+                        return;
+                    }
+    
+                }
+            });
         }
 
         if (innermostContainer === this) {
@@ -374,6 +377,76 @@ export class SortableRef<T = any> {
         } else {
             // When entering a new container, we will find the item with the least distance and
             // append our item near it
+
+            let itemWithLeastDistance = null;
+            let direction = null;
+            let leastIndex = null;
+
+            // // if (_.isEmpty(this._items) && !this.dropOnEmpty) {  return false; }
+
+            if (!_.isEmpty(innermostContainer._items)) {
+                  // const currentItemElement = source.getRootElement();
+                let dist = 10000;
+                const floating = innermostContainer.isFloating();//innermostContainer.isFloating() || this._isFloating(currentItemElement);
+                // const posProperty = floating ? 'left' : 'top';
+                // const sizeProperty = floating ? 'width' : 'height';
+                // const axis = floating ? 'x' : 'y';
+
+                innermostContainer._items.forEach((item, index) => {
+                    const itemElement = item.getRootElement();
+                    if (!coerceElement(innermostContainer.element).contains(itemElement)) {
+                        return;
+                    }
+
+                    if (item === source) {
+                        return;
+                    }
+
+                    const rect = itemElement.getBoundingClientRect();
+                    const c = floating ? rect.left : rect.top;
+                    const p = floating ? pointerPosition.x : pointerPosition.y;
+                    const s = floating ? rect.width : rect.height;
+
+                    let nearBottom = false;
+                    if (p - c > s / 2) {
+                        nearBottom = true;
+                    }
+
+                    if (Math.abs(p - c) < dist) {
+                        dist = Math.abs(p - c);
+                        itemWithLeastDistance = item;
+                        direction = nearBottom ? 'up' : 'down';
+                        leastIndex = index;
+                    }
+
+                    // TODO, 优化定位，解决闪动的问题
+                    // const intersect = innermostContainer._intersectsWithPointer(itemElement, pointerPosition, delta);
+
+                    // if (!intersect) {
+                    //     return;
+                    // }
+
+                    // itemWithLeastDistance = item;
+                    // direction = intersect === 1 ? 'down' : 'up';
+                });
+            }
+
+            // console.log(itemWithLeastDistance, direction, leastIndex, innermostContainer._items.length)
+            if (itemWithLeastDistance) {
+                innermostContainer._rearrange(event, direction, itemWithLeastDistance);
+            } else {
+                // 可以解决空容器的问题
+                innermostContainer._rearrange(event, direction);
+            }
+
+            innermostContainer._cacheItemPositions(source);
+
+            // const currentIndex = _.findIndex(innermostContainer._itemPositions, (it) => it.item === source);
+                // console.log(this._id, 'AAA>>', currentIndex)
+
+            //TODO: 下面这种处理方式不能包括从内向外移动的情况，
+            // 在上面的逻辑中， sortItem 可能同时 enter了重叠的多个 sortlist
+            // 在enter里层的sortlist时，不会 leave外层的sortlist 
             if (!innermostContainer.entered) {
                 innermostContainer.enter(event, this);
             }
@@ -394,7 +467,6 @@ export class SortableRef<T = any> {
         }
 
         const { source, pointerPosition, delta }: { source: SortableItemRef, pointerPosition: { x: number, y: number }, delta: any } = event;
-        // console.log('Sort Pointer', pointerPosition, delta)
 
         // const currentIndex = this._items.indexOf(source);
         // const currentRect = this._clientRects[currentIndex];
@@ -423,8 +495,8 @@ export class SortableRef<T = any> {
                 this._rearrange(event, direction, item);
 
                 const currentIndex = _.findIndex(this._itemPositions, (it) => it.item === source);
+                // console.log(this._id, currentIndex, index)
                 const newIndex = index;
-                // console.log('sorting', currentIndex, newIndex)
                 moveItemInArray(this._itemPositions, currentIndex, newIndex);
             }
 
@@ -434,29 +506,39 @@ export class SortableRef<T = any> {
     }
 
     private _cacheItemPositions(outerItem?) {
-        const isHorizontal = false;
+        const isHorizontal = this.isFloating();
         this._itemPositions = (outerItem ? [...this._items, outerItem] : this._items).map(item => {
             const elementToMeasure = this._dragDropRegistry.isDragging(item) ?
-                item.getPlaceholder() :
+                this._getPlaceholder(item) :
                 item.getRootElement();
             const clientRect = elementToMeasure.getBoundingClientRect();
+            // console.log('rect', clientRect)
 
             return <CachedItemPosition>{
                 item: item,
                 offset: 0,
-                clientRect: { ...clientRect }
+                clientRect: {
+                    top: clientRect.top,
+                    right: clientRect.right,
+                    bottom: clientRect.bottom,
+                    left: clientRect.left,
+                    width: clientRect.width,
+                    height: clientRect.height,
+                }
             };
         }).sort((a, b) => {
-            return (a.clientRect.top - b.clientRect.top)
-            // return isHorizontal ? 
-            //     ((a.clientRect.left - b.clientRect.left) || (a.clientRect.top - b.clientRect.top)) :
-            //     ((a.clientRect.top - b.clientRect.top) || (a.clientRect.left - b.clientRect.left));
+            // console.log(a.clientRect.left - b.clientRect.left, a.clientRect, b.clientRect)
+            // console.log((a.clientRect.left - b.clientRect.left) || (a.clientRect.top - b.clientRect.top))
+            // return (a.clientRect.top - b.clientRect.top)
+            return isHorizontal ? 
+                ((a.clientRect.left - b.clientRect.left) || (a.clientRect.top - b.clientRect.top)) :
+                ((a.clientRect.top - b.clientRect.top) || (a.clientRect.left - b.clientRect.left));
         });
     }
 
     private _rearrange(event, direction, item?: SortableItemRef, ) {
         const { source }: { source: SortableItemRef } = event;
-        const placeholder = (source.mode === 'clone' && _.includes(this._items, source)) ? source.getRootElement() : source.getPlaceholder();
+        const placeholder = this._getPlaceholder(source);
 
         if (!!item) {
             const itemElement = item.getRootElement();
@@ -523,6 +605,61 @@ export class SortableRef<T = any> {
 
     }
 
+    private _getPlaceholder(source: SortableItemRef): HTMLElement {
+        // Wrapper 只对外部成员生效
+        if (_.includes(this._items, source)) {
+            if (source.mode === 'clone') {
+                return source.getRootElement();
+            } else {
+                return source.getPlaceholder();
+            }
+        }
+
+        let wrapper = this._placeholderWrapper;
+        if (!wrapper && !!this._placeholderWrapperTemplate) {
+            wrapper = this._placeholderWrapper = this._createPlaceholderWrapperElement();
+        }
+
+        if (!wrapper) {
+            return source.getPlaceholder();
+        }
+
+        wrapper.appendChild(source.getPlaceholder());
+        return wrapper;
+
+    }
+
+    private _createPlaceholderWrapperElement() {
+        const wrapperConfig = this._placeholderWrapperTemplate;
+        const wrapperTemplate = wrapperConfig ? wrapperConfig.template : null;
+        let wrapper: HTMLElement;
+
+        if (wrapperTemplate) {
+            this._placeholderWrapperRef = wrapperConfig!.viewContainer.createEmbeddedView(
+                wrapperTemplate,
+                wrapperConfig!.context
+            );
+            wrapper = this._placeholderWrapperRef.rootNodes[0] as HTMLElement;
+            wrapper.parentNode.removeChild(wrapper);
+        } else {
+            // placeholder = deepCloneNode(this._rootElement);
+        }
+
+        wrapper.classList.add('np-drag-placeholder-wrapper');
+        return wrapper;
+    }
+
+    private _destoryPlaceholderWrapper() {
+        if (this._placeholderWrapper) {
+            removeElement(this._placeholderWrapper);
+        }
+
+        if (this._placeholderWrapperRef) {
+            this._placeholderWrapperRef.destroy();
+        }
+
+        this._placeholderWrapper = this._placeholderWrapperRef = null!;
+    }
 
     private _removeDragSubscriptions() {
         if (this._dragSubscriptions.length) {
@@ -545,4 +682,15 @@ function distanct(rectA: ClientRect, rectB: ClientRect) {
 function isElementMatchSelector(element: HTMLElement, selector: string) {
     return element.matches ? element.matches(selector) :
         (element as any).msMatchesSelector(selector);
+}
+
+
+/**
+ * Helper to remove an element from the DOM and to do all the necessary null checks.
+ * @param element Element to be removed.
+ */
+function removeElement(element: HTMLElement | null) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+    }
 }

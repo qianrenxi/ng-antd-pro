@@ -24,6 +24,7 @@ export class PortletsComponent implements OnInit {
     if (container === previousContainer) {
       moveItemInArray(this.list2, previousIndex, currentIndex);
     } else {
+      console.log(currentIndex);
       this.list2.splice(currentIndex, 0, data);
     }
   }

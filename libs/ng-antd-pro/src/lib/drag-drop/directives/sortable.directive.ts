@@ -1,4 +1,4 @@
-import { Directive, ContentChildren, QueryList, AfterContentInit, NgZone, OnDestroy, ElementRef, Inject, Renderer2, Output, EventEmitter, Input } from '@angular/core';
+import { Directive, ContentChildren, QueryList, AfterContentInit, NgZone, OnDestroy, ElementRef, Inject, Renderer2, Output, EventEmitter, Input, ContentChild, ViewContainerRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { pipe, Subject } from 'rxjs';
@@ -11,7 +11,8 @@ import { DragDropService } from '../drag-drop.service';
 import * as _ from 'lodash';
 import { coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { DraggableDirective } from './draggable.directive';
-import { DraggableRef } from '../draggable-ref';
+import { DraggableRef, DragHelperTemplate } from '../draggable-ref';
+import { DragPlaceholderWrapperDirective } from './drag-placeholder-wrapper.directive';
 
 type Selector = string;
 
@@ -35,6 +36,7 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
 
   @ContentChildren(SortableItemDirective) items: QueryList<SortableItemDirective>;
   // @ContentChildren(SortableDirective) childSortables: QueryList<SortableDirective>;
+  @ContentChild(DragPlaceholderWrapperDirective) _placeholderWrapperTemplate: DragPlaceholderWrapperDirective;
 
   @Output('npSortActivate')
   activated = new EventEmitter<any>();
@@ -72,6 +74,7 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
     private _viewportRuler: ViewportRuler,
     private _dragDropRegistry: DragDropRegistryService<any, any>,
     private _renderer: Renderer2,
+    private _viewContainerRef: ViewContainerRef,
     dragDrop: DragDropService
   ) {
     const sortRef = this._sortRef = dragDrop.createSort(element, _renderer);
@@ -91,7 +94,9 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
         this.items.changes
           .pipe(startWith(this.items), takeUntil(this._destroyed))
           .subscribe((items: QueryList<SortableItemDirective>) => {
-            const sortItems: SortableItemRef[] = items.toArray().map(it => it._dragRef as SortableItemRef);
+            const sortItems: SortableItemRef[] = items.toArray()
+            .filter(it => coerceElement(it.element) !== coerceElement(this.element))
+            .map(it => it._dragRef as SortableItemRef);
             this._sortRef.withItems(sortItems);
           });
         // this.childSortables.changes
@@ -131,6 +136,14 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
 
       ref.scope = this.scope;
       ref.sort = coerceBooleanProperty(this.sort);
+
+      const placeholderWrapper = this._placeholderWrapperTemplate ? <DragHelperTemplate>{
+        template: this._placeholderWrapperTemplate.templateRef,
+        context: this._placeholderWrapperTemplate.data,
+        viewContainer: this._viewContainerRef,
+      } : null;
+      ref.withPlaceholderWrapperTemplate(placeholderWrapper);
+
     });
   }
 
