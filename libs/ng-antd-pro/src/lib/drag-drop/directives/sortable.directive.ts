@@ -1,4 +1,4 @@
-import { Directive, ContentChildren, QueryList, AfterContentInit, NgZone, OnDestroy, ElementRef, Inject, Renderer2, Output, EventEmitter, Input, ContentChild, ViewContainerRef } from '@angular/core';
+import { Directive, ContentChildren, QueryList, AfterContentInit, NgZone, OnDestroy, ElementRef, Inject, Renderer2, Output, EventEmitter, Input, ContentChild, ViewContainerRef, HostBinding } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { pipe, Subject } from 'rxjs';
@@ -68,6 +68,16 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
   /** same as updated of jquery-ui */
   @Output('npSortDrop')
   dropped = new EventEmitter<any>();
+
+  @HostBinding('class.np-sort-active')
+  get bindActivatedClass(): boolean {
+    return this._sortRef.isActivated();
+  }
+
+  @HostBinding('class.np-sort-over')
+  get bindOveringClass(): boolean {
+    return this._sortRef.entered;
+  }
 
   constructor(
     public element: ElementRef<HTMLElement>,

@@ -295,24 +295,44 @@ export class SortableRef<T = any> {
 
         const currentIndex = _.findIndex(this._itemPositions, (it) => it.item === source);
 
-        if (initialContainer === this) {
-            // deactivate siblings
-            this._siblings.forEach(it => it.markAsDeactivated(event));
-        }
-
-        if (initialContainer !== this) {
-            
-        }
-
-        this.dropped$.next({
+        const eventObj = {
             item: source,
             container: this,
             currentIndex: currentIndex,
             previousContainer: previousContainer,
             previousIndex: previousIndex,
             isPointerOverContainer: this._entered,
-            // catchedByChildren: false
-        });
+        };
+
+        if (initialContainer === this) {
+            // deactivate siblings
+            this._siblings.forEach(it => it.markAsDeactivated(event));
+
+            // TODO: isEnterd 不能解决从父级container移动到子级的情况，
+            // 需要重构，在合适的情况更新 itemPositions，以 currentIndex === -1 作为移除的唯一判定条件
+            if (this._entered) {
+                // 没有移除本容器
+                if (currentIndex === previousIndex) {
+                    // 没有移动
+                    // this.ended$.next(eventObj); // 稍后统一发出
+                } else {
+                    this.dropped$.next(eventObj); // same as update of jquery ui
+                }
+            } else {
+                this.removed$.next(eventObj);
+                this.dropped$.next(eventObj);
+            }
+        } else {
+            if (this._entered) {
+                if (currentIndex >= 0) {
+                    this.received$.next(eventObj);
+                    this.dropped$.next(eventObj);
+                }
+            }
+
+        }
+
+        this.ended$.next(eventObj);
 
         if (initialContainer === this) {
             this._activeSiblings.forEach(it => {
