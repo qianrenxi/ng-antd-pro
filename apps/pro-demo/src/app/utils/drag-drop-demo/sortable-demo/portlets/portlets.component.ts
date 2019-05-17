@@ -8,25 +8,44 @@ import { DraggableDirective, moveItemInArray } from '@qianrenxi/ng-antd-pro';
 })
 export class PortletsComponent implements OnInit {
 
-  list2 = [];
+  widgets;
 
   constructor() { }
 
   ngOnInit() {
+    this.widgets = [
+      ['Widget 1-1', 'Widget 1-2', 'Widget 1-3', 'Widget 1-4',],
+      ['Widget 2-1', 'Widget 2-2', 'Widget 2-3', 'Widget 2-4', 'Widget 2-5',],
+      ['Widget 3-1', 'Widget 3-2', 'Widget 3-3',],
+      ['Widget 4-1', 'Widget 4-2', 'Widget 4-3', 'Widget 4-4', 'Widget 4-5', 'Widget 4-6',],
+    ];
   }
 
   onContentRegionDrop($event) {
-    const {item, container, currentIndex, previousContainer, previousIndex} = $event;
+    const { item, container, currentIndex, previousContainer, previousIndex } = $event;
     const data = (item as DraggableDirective).dragData;
-    
+
     // 根据 data 判断来源
-    
-    if (container === previousContainer) {
-      moveItemInArray(this.list2, previousIndex, currentIndex);
-    } else {
-      console.log(currentIndex);
-      this.list2.splice(currentIndex, 0, data);
-    }
+
   }
 
+  onRowsDrop($event) {
+    const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = $event;
+    if (currentIndex === -1 || !isPointerOverContainer) {
+      console.log('rows dropped, but not catch it');
+      return ;
+    }
+
+    console.log('rows dropped', $event);
+  }
+
+  onRowDrop($event) {
+    const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = $event;
+    if (currentIndex === -1 || !isPointerOverContainer) {
+      console.log('row dropped, but not catch it');
+      return ;
+    }
+
+    console.log('row dropped', $event);
+  }
 }

@@ -1,4 +1,3 @@
-
 .gallery {
     width: 100%;
     height: 96px;
@@ -6,10 +5,11 @@
     border: 1px solid #67c9f0;
 }
 
-ul.gallery-list, li.gallery-item {
-   list-style: none;
-   margin: 0;
-   padding: 0; 
+ul.gallery-list,
+li.gallery-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .gallery-list {
@@ -20,7 +20,8 @@ ul.gallery-list, li.gallery-item {
     }
 }
 
-.gallery-item, .region-widget {
+.gallery-item,
+.region-widget {
     display: inline-block;
     padding: 4px 12px !important;
     border: 1px solid #cccccc;
@@ -55,7 +56,7 @@ ul.gallery-list, li.gallery-item {
     padding: 32px 16px;
 
     h5.help-title {
-        text-transform:uppercase;
+        text-transform: uppercase;
         font-weight: 400;
         margin: 16px 0 0 0;
         line-height: 2em;
@@ -68,8 +69,44 @@ ul.gallery-list, li.gallery-item {
     }
 }
 
+// .region-row {
+//     min-height: 8px;
+//     background: rgba($color: #2057ee, $alpha: 0.5);
+//     border: 1px solid #2057ee;
+// }
+
+
+.region-rows {
+    border: 1px solid rgba($color: #1890ff, $alpha: 0.5);
+}
+
 .region-row {
-    min-height: 8px;
-    background: rgba($color: #2057ee, $alpha: 0.5);
-    border: 1px solid #2057ee;
+    padding: 4px;
+    margin: 2px 0;
+
+    &.np-drop-active,
+    &.np-drag-placeholder-wrapper {
+        border: 1px solid rgba($color: #1890ff, $alpha: 0.375);
+        background: rgba($color: #1890ff, $alpha: 0.125);
+        border-radius: 2px;
+    }
+
+    &.region-row-placeholder-wrapper {}
+
+    .widget-drop-placeholder.np-drag-placeholder {
+        display: inline-block;
+        height: 30px;
+        min-width: 120px;
+        background: rgba(24, 144, 255, 0.55);
+        line-height: 32px;
+        border-radius: 2px;
+        margin-right: 8px;
+    }
+}
+
+.widget-box {
+    border: 1px solid #cccccc;
+    height: 32px;
+    line-height: 32px;
+    background: #ffffff;
 }

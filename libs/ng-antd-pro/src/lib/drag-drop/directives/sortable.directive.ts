@@ -19,7 +19,7 @@ type Selector = string;
 @Directive({
   selector: '[npSortable]'
 })
-export class SortableDirective implements AfterContentInit, OnDestroy {
+export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
   private static _globalSortables: SortableDirective[] = [];
 
   private _destroyed = new Subject();
@@ -33,6 +33,8 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
 
   @Input('npSortAxis') axis: 'x' | 'y';
   @Input('npSortConnectWith') connectWith: string;
+
+  @Input('npSortData') sortData: S;
 
   @ContentChildren(SortableItemDirective) items: QueryList<SortableItemDirective>;
   // @ContentChildren(SortableDirective) childSortables: QueryList<SortableDirective>;
@@ -114,6 +116,8 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
     this._destroyed.next();
     this._destroyed.complete();
 
+    this._sortRef.despose();
+    
     _.remove(SortableDirective._globalSortables, this);
   }
 
@@ -148,7 +152,8 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
   }
 
   private _handleEvents(ref: SortableRef<SortableDirective>) {
-    ref.dropped$.subscribe((event) => {
+
+    const releaseEventCall = (event) => {
       const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
       this.dropped.emit({
         item: item.instance,
@@ -158,7 +163,11 @@ export class SortableDirective implements AfterContentInit, OnDestroy {
         previousIndex,
         isPointerOverContainer,
       });
-    });
+    }; 
+    ref.removed$.subscribe(releaseEventCall);
+    ref.received$.subscribe(releaseEventCall);
+    ref.ended$.subscribe(releaseEventCall);
+    ref.dropped$.subscribe(releaseEventCall);
   }
 }
 

@@ -62,8 +62,10 @@ export class DragDropRegistryService<I, C> implements OnDestroy {
 
     /** Removes a drag item instance from the registry. */
     removeDragItem(drag: I) {
-        this._dragInstances.delete(drag);
-        this.stopDragging(drag);
+        if (this._dragInstances.has(drag)) {
+            this._dragInstances.delete(drag);
+            this.stopDragging(drag);
+        }
 
         if (this._dragInstances.size === 0) {
             this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging,
@@ -114,8 +116,10 @@ export class DragDropRegistryService<I, C> implements OnDestroy {
     }
 
     stopDragging(drag: I) {
-        this._activeDragInstances.delete(drag);
-        this.stopDragging$.next(drag);
+        if (this._activeDragInstances.has(drag)) {
+            this._activeDragInstances.delete(drag);
+            this.stopDragging$.next(drag);
+        }
 
         if (this._activeDragInstances.size === 0) {
             this._clearGlobalListeners();

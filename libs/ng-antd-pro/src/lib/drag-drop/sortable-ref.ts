@@ -52,6 +52,8 @@ export class SortableRef<T = any> {
     // floating: boolean = false;
     sort: boolean = true;
 
+    _hasStarted: boolean = false;
+
     instance: T;
 
     beforStarted = new Subject<any>();
@@ -80,7 +82,7 @@ export class SortableRef<T = any> {
         currentIndex: number,
         previousContainer: SortableRef,
         previousIndex: number,
-        isPointerOverContainer: boolean
+        isPointerOverContainer: boolean,
     }>();
 
     constructor(
@@ -178,6 +180,9 @@ export class SortableRef<T = any> {
 
         if (!_.includes(this._items, source)) {
             this.beforStarted.next();
+
+            this._hasStarted = true;
+
             this._cacheItemPositions(source);
 
             this._dragSubscriptions.push(
@@ -209,6 +214,7 @@ export class SortableRef<T = any> {
     }
 
     private _anyDragStarted(dragRef: SortableItemRef) {
+        // console.log('start...')
         // TODO: fix to accept connected items
         if (!_.includes(this._items, dragRef)) {
             return;
@@ -242,13 +248,17 @@ export class SortableRef<T = any> {
     }
 
     private _anyDragStoped(dragRef: SortableItemRef) {
-        // this._removeDragSubscriptions();
+        // console.log('stop...')
+        if (!this._hasStarted) {
+            this._removeDragSubscriptions();
+        }
     }
 
 
     private _handleDragStart(event) {
         this.beforStarted.next();
 
+        this._hasStarted = true;
         // TODO: Filter active siblings
         this._activeSiblings = this._siblings;
         this._activeSiblings.forEach(it => it.markAsActivated(event));
@@ -290,13 +300,18 @@ export class SortableRef<T = any> {
             this._siblings.forEach(it => it.markAsDeactivated(event));
         }
 
+        if (initialContainer !== this) {
+            
+        }
+
         this.dropped$.next({
             item: source,
             container: this,
             currentIndex: currentIndex,
             previousContainer: previousContainer,
             previousIndex: previousIndex,
-            isPointerOverContainer: true
+            isPointerOverContainer: this._entered,
+            // catchedByChildren: false
         });
 
         if (initialContainer === this) {
@@ -305,8 +320,12 @@ export class SortableRef<T = any> {
             });
         }
         this._destoryPlaceholderWrapper();
+
+        this._hasStarted = false;
+        this._removeDragSubscriptions();
     }
 
+    // TODO: 会在拖动过程中频繁调用，但是该方法看起来又很复杂，会不会有性能问题？
     private _contactContainers(event) {
         const { source, pointerPosition, delta }: { source: SortableItemRef, pointerPosition: Point, delta } = event;
         const currentItem = source;
@@ -355,6 +374,7 @@ export class SortableRef<T = any> {
                     // If we've already found a container and it's more "inner" than this, then continue
                     if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
                         container._destoryPlaceholderWrapper();
+                        container._cacheItemPositions();
                         return;
                     }
     

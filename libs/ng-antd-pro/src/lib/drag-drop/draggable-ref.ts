@@ -383,6 +383,7 @@ export class DraggableRef<T = any> {
         // }
 
         if (!this._hasStartedDragging) {
+            this._dragDropRegistry.stopDragging(this);
             return;
         }
 
