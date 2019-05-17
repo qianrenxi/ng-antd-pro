@@ -153,7 +153,29 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
 
   private _handleEvents(ref: SortableRef<SortableDirective>) {
 
-    const releaseEventCall = (event) => {
+    ref.removed$.subscribe((event) => {
+      const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
+      this.removed.emit({
+        item: item.instance,
+        container: this,
+        currentIndex,
+        previousContainer: previousContainer.instance,
+        previousIndex,
+        isPointerOverContainer,
+      });
+    });
+    ref.received$.subscribe((event) => {
+      const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
+      this.received.emit({
+        item: item.instance,
+        container: this,
+        currentIndex,
+        previousContainer: previousContainer.instance,
+        previousIndex,
+        isPointerOverContainer,
+      });
+    });
+    ref.ended$.subscribe((event) => {
       const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
       this.dropped.emit({
         item: item.instance,
@@ -163,11 +185,18 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
         previousIndex,
         isPointerOverContainer,
       });
-    }; 
-    ref.removed$.subscribe(releaseEventCall);
-    ref.received$.subscribe(releaseEventCall);
-    ref.ended$.subscribe(releaseEventCall);
-    ref.dropped$.subscribe(releaseEventCall);
+    });
+    ref.dropped$.subscribe((event) => {
+      const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
+      this.dropped.emit({
+        item: item.instance,
+        container: this,
+        currentIndex,
+        previousContainer: previousContainer.instance,
+        previousIndex,
+        isPointerOverContainer,
+      });
+    });
   }
 }
 
