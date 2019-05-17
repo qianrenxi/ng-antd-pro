@@ -137,6 +137,7 @@ export class PortletsComponent implements OnInit {
   }
 
   rowDrop($event) {
+    console.log('drop', $event)
     // 和拖拽元素相关的容器均会接收到释放信息，移动或新增的释放信息已单独处理，这里只需要处理同一个容器内的组件排序即可
     const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = $event;
 

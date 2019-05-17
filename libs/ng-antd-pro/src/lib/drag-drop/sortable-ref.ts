@@ -196,12 +196,13 @@ export class SortableRef<T = any> {
 
     leave(event) {
         this._entered = false;
-        console.log(this.id, "leaving")
+        // console.log(this.id, "leaving")
 
         const { source }: { source: SortableItemRef } = event;
         if (!_.includes(this._items, source)) {
             this._removeDragSubscriptions();
             this._destoryPlaceholderWrapper();
+            this._cacheItemPositions();
         }
     }
 
@@ -312,6 +313,7 @@ export class SortableRef<T = any> {
             // TODO: isEnterd 不能解决从父级container移动到子级的情况，
             // 需要重构，在合适的情况更新 itemPositions，以 currentIndex === -1 作为移除的唯一判定条件
             // console.log("me", this.id, previousContainer.id, this._entered)
+            // console.log("me", this.id, currentIndex, previousIndex, this._entered)
             if (this._entered) {
                 // 没有移除本容器
                 if (currentIndex === previousIndex) {
@@ -386,18 +388,21 @@ export class SortableRef<T = any> {
         if (!innermostContainer) {
             return;
         } else {
+            // TODO: 优化，这个会在 mousemove 时持续调用，当 container 比较多时会很耗资源
             containers.forEach((container, index) => {
                 const containerElement = coerceElement(container.element);
                 // Never consider a container that's located within the item itself.
-                if (currentItemElement!.contains(containerElement)) {
+                if (currentItemElement!.contains(containerElement) || container === innermostContainer) {
                     return;
                 }
 
                 if (this._intersectsWith(container, containerElement, pointerPosition, delta)) {
                     // If we've already found a container and it's more "inner" than this, then continue
                     if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
-                        container._destoryPlaceholderWrapper();
-                        container._cacheItemPositions();
+                        if (container._placeholderWrapper) {
+                            container._destoryPlaceholderWrapper();
+                            container._cacheItemPositions();
+                        }
                         return;
                     }
 
@@ -405,18 +410,21 @@ export class SortableRef<T = any> {
             });
         }
 
-        if (innermostContainer === this) {
-            if (!this.entered) {
+        if ((innermostContainer !== this && innermostContainer._itemPositions && innermostContainer._itemPositions.some(it => it.item === source))
+            || (innermostContainer === this && this.entered)
+        ) {
+        // if (innermostContainer === this) {
+            if (!innermostContainer.entered) {
                 // TODO: mark enter into the container
                 // this._entered = true;
-                this.enter(event, this);
+                innermostContainer.enter(event, this);
             }
 
-            // return ;
+        //     // return ;
         } else {
             // When entering a new container, we will find the item with the least distance and
             // append our item near it
-
+        
             let itemWithLeastDistance = null;
             let direction = null;
             let leastIndex = null;
@@ -470,7 +478,7 @@ export class SortableRef<T = any> {
                 });
             }
 
-            // console.log(itemWithLeastDistance, direction, leastIndex, innermostContainer._items.length)
+            // console.log(innermostContainer.id, itemWithLeastDistance, direction, leastIndex, innermostContainer._items.length)
             if (itemWithLeastDistance) {
                 innermostContainer._rearrange(event, direction, itemWithLeastDistance);
             } else {
@@ -478,7 +486,12 @@ export class SortableRef<T = any> {
                 innermostContainer._rearrange(event, direction);
             }
 
-            innermostContainer._cacheItemPositions(source);
+            if (innermostContainer === this) {
+                innermostContainer._cacheItemPositions();
+            } else {
+                innermostContainer._cacheItemPositions(source);
+                this._cacheItemPositions();
+            }
 
             // const currentIndex = _.findIndex(innermostContainer._itemPositions, (it) => it.item === source);
             // console.log(this._id, 'AAA>>', currentIndex)
@@ -496,7 +509,7 @@ export class SortableRef<T = any> {
     }
 
     _sort(event) {
-        if (!this.enter) {
+        if (!this.entered) {
             return;
         }
 
@@ -504,7 +517,7 @@ export class SortableRef<T = any> {
             return;
             // TODO: sccept the item, append it to the list 
         }
-
+        // console.log(this.id, this.entered, this.sort, 'sorting')
         const { source, pointerPosition, delta }: { source: SortableItemRef, pointerPosition: { x: number, y: number }, delta: any } = event;
 
         // const currentIndex = this._items.indexOf(source);
@@ -534,7 +547,7 @@ export class SortableRef<T = any> {
                 this._rearrange(event, direction, item);
 
                 const currentIndex = _.findIndex(this._itemPositions, (it) => it.item === source);
-                // console.log(this._id, currentIndex, index)
+                // console.log(this.id, currentIndex, index)
                 const newIndex = index;
                 moveItemInArray(this._itemPositions, currentIndex, newIndex);
             }
@@ -546,7 +559,7 @@ export class SortableRef<T = any> {
 
     private _cacheItemPositions(outerItem?) {
         const isHorizontal = this.isFloating();
-        this._itemPositions = (outerItem ? [...this._items, outerItem] : this._items).map(item => {
+        this._itemPositions = (outerItem ? [...this._items.filter(it => it !== outerItem), outerItem] : this._items).map(item => {
             const elementToMeasure = this._dragDropRegistry.isDragging(item) ?
                 this._getPlaceholder(item) :
                 item.getRootElement();

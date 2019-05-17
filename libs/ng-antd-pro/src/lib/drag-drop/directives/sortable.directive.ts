@@ -198,6 +198,7 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
     });
     ref.dropped$.subscribe((event) => {
       const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = event;
+      // console.log('sort drop', event)
       this.dropped.emit({
         item: item.instance,
         container: this,
