@@ -1,17 +1,12 @@
 <h2>Portlets demo</h2>
 <div class="gallery">
   <ul class="gallery-list regions" npSortable npDragSort="false" npSortConnectWith=".region-drop-container">
-    <li class="gallery-item region" npSortableItem npDragMode="clone" npDragData="Region A">
-      Region A
-      <div class="item-preview" *npDragPreview>Region A</div>
-      <div class="gallery-item" *npDragPlaceholder>Region A P</div>
-    </li>
-    <li class="gallery-item region" npSortableItem npDragMode="clone" npDragData="Region B">
-      Region B
-      <div class="item-preview" *npDragPreview>Region B</div>
+    <li *ngFor="let item of _widgets" class="gallery-item region" npSortableItem npDragMode="clone" [npDragData]="item">
+      {{item.label}}
+      <div class="item-preview" *npDragPreview>{{item.label}}</div>
     </li>
   </ul>
-  <ul class="gallery-list items" npSortable npDragSort="false" npSortConnectWith=".region-drop-container">
+  <!-- <ul class="gallery-list items" npSortable npDragSort="false" npSortConnectWith=".region-drop-container">
     <li class="gallery-item item" npSortableItem npDragMode="clone" npDragData="Item 1">
       Item 1
       <div class="item-preview" *npDragPreview>Item 1</div>
@@ -20,21 +15,17 @@
       Item 2
       <div class="item-preview" *npDragPreview>Item 2</div>
     </li>
-  </ul>
+  </ul> -->
 </div>
 
 <div class="page-wrapper">
   <h5 class="help-title">CONTENT-HEADER</h5>
   <div class="content-region">
-  </div>
-
-  <h5 class="help-title">CONTENT-BODY</h5>
-  <div class="content-region" npSortable npDragSort="false" style="padding: 8px;">
-
-    <div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortDrop)="onRowsDrop($event)">
+    <div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortReceive)="rowsReceive($event)">
       <ng-container *ngFor="let rowItems of widgets; let i = index;">
         <div class="region-drop-container region-row np-drop-active" npSortableItem npDragDisabled npSortable
-          npSortConnectWith=".region-drop-container" (npSortDrop)="onRowDrop($event)">
+          npSortConnectWith=".region-drop-container" [npSortData]="rowItems" (npSortReceive)="rowReceive($event)"
+          (npSortRemove)="rowRemoveItem($event)">
           <div *ngFor="let widget of rowItems; let j = index;" npSortableItem [npDragData]="widget"
             class="widget-box d-inline-block mr-2">
             {{widget}}
@@ -45,6 +36,26 @@
 
       <div class="region-row region-row-placeholder-wrapper" *npDragPlaceholderWrapper></div>
     </div>
+  </div>
+
+  <h5 class="help-title">CONTENT-BODY</h5>
+  <div class="content-region">
+
+    <!-- <div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortReceive)="rowsReceive($event)">
+      <ng-container *ngFor="let rowItems of widgets; let i = index;">
+        <div class="region-drop-container region-row np-drop-active" npSortableItem npDragDisabled npSortable
+          npSortConnectWith=".region-drop-container" [npSortData]="rowItems" (npSortReceive)="rowReceive($event)"
+          (npSortRemove)="rowRemoveItem($event)">
+          <div *ngFor="let widget of rowItems; let j = index;" npSortableItem [npDragData]="widget"
+            class="widget-box d-inline-block mr-2">
+            {{widget}}
+            <div *npDragPlaceholder class="widget-drop-placeholder np-drag-placeholder">&nbsp;</div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="region-row region-row-placeholder-wrapper" *npDragPlaceholderWrapper></div>
+    </div> -->
 
   </div>
 </div>

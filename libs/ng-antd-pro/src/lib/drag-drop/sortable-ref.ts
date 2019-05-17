@@ -16,6 +16,7 @@ interface CachedItemPosition {
     offset: number;
 }
 
+let ID = 0;
 
 export interface SortableItemRef extends DraggableRef { };
 
@@ -85,6 +86,8 @@ export class SortableRef<T = any> {
         isPointerOverContainer: boolean,
     }>();
 
+    id = ++ID;
+
     constructor(
         public element: ElementRef<HTMLElement> | HTMLElement,
         private _document: Document,
@@ -95,6 +98,8 @@ export class SortableRef<T = any> {
     ) {
         this._anyDragStartSubscription = _dragDropRegistry.startDragging$.subscribe(dragRef => this._anyDragStarted(dragRef));
         this._anyDragStopSubscription = _dragDropRegistry.stopDragging$.subscribe(dragRef => this._anyDragStoped(dragRef));
+
+        // coerceElement(element).append(`${++this.id}`);
     }
 
     withItems(items: SortableItemRef[]): this {
@@ -155,18 +160,10 @@ export class SortableRef<T = any> {
 
     enter(event, initContainer) {
         // this.beforStarted.next();
-        // console.log(this._id, "entered")
+        // console.log(this.id, "entered")
 
         // TODO: extract to a method
         const { source, pointerPosition, delta }: { source: SortableItemRef, pointerPosition: Point, delta } = event;
-        // const currentItemElement = source.getRootElement();
-        // const dist = 10000;
-        // const floating = this._isFloating(currentItemElement);
-        // const posProperty = floating ? 'left' : 'top';
-        // const sizeProperty = floating ? 'width' : 'height';
-        // const axis = floating ? 'x' : 'y';
-
-
 
         // TODO emit change,
         // TODO shuld emit change after enter, so 应该调整时间及相应处理逻辑的先后顺序
@@ -199,7 +196,7 @@ export class SortableRef<T = any> {
 
     leave(event) {
         this._entered = false;
-        // console.log(this._id, "leaving")
+        // console.log(this.id, "leaving")
 
         const { source }: { source: SortableItemRef } = event;
         if (!_.includes(this._items, source)) {
@@ -209,8 +206,10 @@ export class SortableRef<T = any> {
     }
 
     cancel() {
-        this._entered = false;
-        this._destoryPlaceholderWrapper();
+        if (!this._hasStarted) {
+            this._entered = false;
+            this._destoryPlaceholderWrapper();
+        }
     }
 
     private _anyDragStarted(dragRef: SortableItemRef) {
@@ -304,12 +303,14 @@ export class SortableRef<T = any> {
             isPointerOverContainer: this._entered,
         };
 
-        if (initialContainer === this) {
+        // console.log(previousContainer.id, this.id, this._entered)
+        if (previousContainer === this) {
             // deactivate siblings
             this._siblings.forEach(it => it.markAsDeactivated(event));
 
             // TODO: isEnterd 不能解决从父级container移动到子级的情况，
             // 需要重构，在合适的情况更新 itemPositions，以 currentIndex === -1 作为移除的唯一判定条件
+            // console.log("me", this.id, previousContainer.id, this._entered)
             if (this._entered) {
                 // 没有移除本容器
                 if (currentIndex === previousIndex) {
@@ -323,6 +324,7 @@ export class SortableRef<T = any> {
                 this.dropped$.next(eventObj);
             }
         } else {
+            // console.log("other", this.id, previousContainer.id, this._entered)
             if (this._entered) {
                 if (currentIndex >= 0) {
                     this.received$.next(eventObj);
@@ -330,11 +332,14 @@ export class SortableRef<T = any> {
                 }
             }
 
+            this._entered = false;
+            this._destoryPlaceholderWrapper();
+
         }
 
         this.ended$.next(eventObj);
 
-        if (initialContainer === this) {
+        if (previousContainer === this) {
             this._activeSiblings.forEach(it => {
                 it.cancel();
             });
@@ -405,7 +410,8 @@ export class SortableRef<T = any> {
         if (innermostContainer === this) {
             if (!this.entered) {
                 // TODO: mark enter into the container
-                this._entered = true;
+                // this._entered = true;
+                this.enter(event, this);
             }
 
             // return ;
