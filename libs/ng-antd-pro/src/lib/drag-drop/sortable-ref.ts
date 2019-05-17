@@ -196,7 +196,7 @@ export class SortableRef<T = any> {
 
     leave(event) {
         this._entered = false;
-        // console.log(this.id, "leaving")
+        console.log(this.id, "leaving")
 
         const { source }: { source: SortableItemRef } = event;
         if (!_.includes(this._items, source)) {
@@ -258,6 +258,7 @@ export class SortableRef<T = any> {
         this.beforStarted.next();
 
         this._hasStarted = true;
+        this._entered = true;
         // TODO: Filter active siblings
         this._activeSiblings = this._siblings;
         this._activeSiblings.forEach(it => it.markAsActivated(event));
@@ -331,10 +332,6 @@ export class SortableRef<T = any> {
                     this.dropped$.next(eventObj);
                 }
             }
-
-            this._entered = false;
-            this._destoryPlaceholderWrapper();
-
         }
 
         this.ended$.next(eventObj);
@@ -347,6 +344,7 @@ export class SortableRef<T = any> {
         this._destoryPlaceholderWrapper();
 
         this._hasStarted = false;
+        this._entered = false;
         this._removeDragSubscriptions();
     }
 
@@ -368,7 +366,7 @@ export class SortableRef<T = any> {
                 return;
             }
 
-            if (this._intersectsWith(containerElement, pointerPosition, delta)) {
+            if (this._intersectsWith(container, containerElement, pointerPosition, delta)) {
                 // If we've already found a container and it's more "inner" than this, then continue
                 if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
                     return;
@@ -394,15 +392,15 @@ export class SortableRef<T = any> {
                 if (currentItemElement!.contains(containerElement)) {
                     return;
                 }
-    
-                if (this._intersectsWith(containerElement, pointerPosition, delta)) {
+
+                if (this._intersectsWith(container, containerElement, pointerPosition, delta)) {
                     // If we've already found a container and it's more "inner" than this, then continue
                     if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
                         container._destoryPlaceholderWrapper();
                         container._cacheItemPositions();
                         return;
                     }
-    
+
                 }
             });
         }
@@ -426,7 +424,7 @@ export class SortableRef<T = any> {
             // // if (_.isEmpty(this._items) && !this.dropOnEmpty) {  return false; }
 
             if (!_.isEmpty(innermostContainer._items)) {
-                  // const currentItemElement = source.getRootElement();
+                // const currentItemElement = source.getRootElement();
                 let dist = 10000;
                 const floating = innermostContainer.isFloating();//innermostContainer.isFloating() || this._isFloating(currentItemElement);
                 // const posProperty = floating ? 'left' : 'top';
@@ -483,7 +481,7 @@ export class SortableRef<T = any> {
             innermostContainer._cacheItemPositions(source);
 
             // const currentIndex = _.findIndex(innermostContainer._itemPositions, (it) => it.item === source);
-                // console.log(this._id, 'AAA>>', currentIndex)
+            // console.log(this._id, 'AAA>>', currentIndex)
 
             //TODO: 下面这种处理方式不能包括从内向外移动的情况，
             // 在上面的逻辑中， sortItem 可能同时 enter了重叠的多个 sortlist
@@ -571,7 +569,7 @@ export class SortableRef<T = any> {
             // console.log(a.clientRect.left - b.clientRect.left, a.clientRect, b.clientRect)
             // console.log((a.clientRect.left - b.clientRect.left) || (a.clientRect.top - b.clientRect.top))
             // return (a.clientRect.top - b.clientRect.top)
-            return isHorizontal ? 
+            return isHorizontal ?
                 ((a.clientRect.left - b.clientRect.left) || (a.clientRect.top - b.clientRect.top)) :
                 ((a.clientRect.top - b.clientRect.top) || (a.clientRect.left - b.clientRect.left));
         });
@@ -601,8 +599,17 @@ export class SortableRef<T = any> {
     }
 
     // Be careful with the following core functions
-    private _intersectsWith(item: HTMLElement, pointerPosition: Point, delta: any) {
-        return this._intersectsWithPointer(item, pointerPosition, delta);
+    private _intersectsWith(container: SortableRef, item: HTMLElement, pointerPosition: Point, delta: any) {
+        // return this._intersectsWithPointer(item, pointerPosition, delta);
+        const rect = coerceElement(container.element).getBoundingClientRect();
+        const isOverElementHeight = (this.axis === 'x') || this._isOverAxis(pointerPosition.y, rect.top, rect.height);
+        const isOverElementWidth = (this.axis === 'y') || this._isOverAxis(pointerPosition.x, rect.left, rect.width);
+
+        const isOverElement = isOverElementHeight && isOverElementWidth;
+
+        // if (this.tolerance === "pointer") {
+        return isOverElement;
+        // } else { 通过 Preview 计算是否交叉 }
     }
 
     private _intersectsWithPointer(item: HTMLElement, pointerPosition: Point, delta: any) {

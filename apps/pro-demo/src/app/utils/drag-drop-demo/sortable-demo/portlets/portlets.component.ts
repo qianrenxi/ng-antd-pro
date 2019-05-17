@@ -122,7 +122,7 @@ export class PortletsComponent implements OnInit {
     const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = $event;
     const sourceData = item.dragData;
 
-    console.log('previousIndex', previousIndex)
+    console.log('previousIndex', previousIndex, isPointerOverContainer)
 
     const list = container.sortData as any[];
       // console.log(list)
