@@ -55,6 +55,13 @@ export class SortableRef<T = any> {
 
     _hasStarted: boolean = false;
 
+    scroll: boolean = true;
+    // 保持唯一，需要传入 Dom 元素的ID
+    scrollHookSelector: string;
+    // TODO change to config
+    scrollSensitivity: number = 20;
+    scrollSpeed: number = 20;
+
     instance: T;
 
     beforStarted = new Subject<any>();
@@ -196,12 +203,13 @@ export class SortableRef<T = any> {
 
     leave(event) {
         this._entered = false;
-        console.log(this.id, "leaving")
+        // this._hasStarted = false;
+        // console.log(this.id, "leaving")
 
         const { source }: { source: SortableItemRef } = event;
         if (!_.includes(this._items, source)) {
             this._removeDragSubscriptions();
-            this._destoryPlaceholderWrapper();
+            // this._destoryPlaceholderWrapper();
         }
     }
 
@@ -273,9 +281,11 @@ export class SortableRef<T = any> {
         const innermostContainer = this._contactContainers(event);
 
         // scroll
-        if (!!this._scroll(event)) {
-            if (!!innermostContainer) {
-                innermostContainer._cacheItemPositions(event.source);
+        if ((!!innermostContainer && innermostContainer.scroll) || this.scroll) {
+            if (this._scroll(event)) {
+                if (!!innermostContainer) {
+                    innermostContainer._cacheItemPositions(event.source);
+                }
             }
         }
 
@@ -312,6 +322,7 @@ export class SortableRef<T = any> {
         };
 
         // console.log(previousContainer.id, this.id, this._entered)
+        // console.log("drop container", this.id, currentIndex, previousIndex, this._entered)
         if (previousContainer === this) {
             // deactivate siblings
             this._siblings.forEach(it => it.markAsDeactivated(event));
@@ -325,6 +336,7 @@ export class SortableRef<T = any> {
                     // 没有移动
                     // this.ended$.next(eventObj); // 稍后统一发出
                 } else {
+                    // console.log('drop devent')
                     this.dropped$.next(eventObj); // same as update of jquery ui
                 }
             } else {
@@ -400,27 +412,40 @@ export class SortableRef<T = any> {
                     return;
                 }
 
-                if (this._intersectsWith(container, containerElement, pointerPosition, delta)) {
-                    // If we've already found a container and it's more "inner" than this, then continue
-                    if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
-                        container._destoryPlaceholderWrapper();
-                        container._cacheItemPositions();
-                        return;
-                    }
+                // if (this._intersectsWith(container, containerElement, pointerPosition, delta)) {
+                //     // If we've already found a container and it's more "inner" than this, then continue
+                //     if (innermostContainer && containerElement.contains(coerceElement(innermostContainer.element))) {
+                //         container._destoryPlaceholderWrapper();
+                //         container._cacheItemPositions();
+                //         return;
+                //     }
 
+                // }
+                if (container !== innermostContainer) {
+                    if (container._placeholderWrapper) {
+                        container._destoryPlaceholderWrapper();
+                    }
+                    if (container !== this) {
+                        container._cacheItemPositions();
+                    } else {
+                        this._itemPositions = this._itemPositions && this._itemPositions.filter(it => it.item === source);
+                        // container._cacheItemPositions();
+                    }
                 }
             });
         }
 
-        if (innermostContainer === this) {
-            if (!this.entered) {
-                // TODO: mark enter into the container
-                // this._entered = true;
-                this.enter(event, this);
-            }
+        // if (innermostContainer === this) {
+        //     if (!this.entered) {
+        //         // TODO: mark enter into the container
+        //         // this._entered = true;
+        //         this.enter(event, this);
+        //     }
 
-            // return ;
-        } else {
+        //     // return ;
+        // } else {
+        if ((!innermostContainer._itemPositions || !innermostContainer._itemPositions.some(it => it.item === source))
+            || (innermostContainer === this && !innermostContainer.entered)) {
             // When entering a new container, we will find the item with the least distance and
             // append our item near it
 
@@ -487,8 +512,8 @@ export class SortableRef<T = any> {
 
             innermostContainer._cacheItemPositions(source);
 
-            // const currentIndex = _.findIndex(innermostContainer._itemPositions, (it) => it.item === source);
-            // console.log(this._id, 'AAA>>', currentIndex)
+            const currentIndex = _.findIndex(innermostContainer._itemPositions, (it) => it.item === source);
+            // console.log(this.id, 'AAA>>', currentIndex)
 
             //TODO: 下面这种处理方式不能包括从内向外移动的情况，
             // 在上面的逻辑中， sortItem 可能同时 enter了重叠的多个 sortlist
@@ -504,12 +529,12 @@ export class SortableRef<T = any> {
 
     _scroll(event) {
         const { source, pointerPosition } = event;
-        const placeholder = this._getPlaceholder(source);
+        const placeholder = (source as SortableItemRef).getPlaceholder(); // this._getPlaceholder(source);
         const scrollParent = getScrollParent(placeholder) as (HTMLElement | Document);
         const pointerY = pointerPosition.y;
         const pointerX = pointerPosition.x;
-        const scrollSensitivity = 20;
-        const scrollSpeed = 20;
+        const scrollSensitivity = this.scrollSensitivity || 20;
+        const scrollSpeed = this.scrollSpeed || 20;
         let scrolled = false;
 
         if (!(scrollParent instanceof Document) && scrollParent.tagName !== "HTML") {
@@ -593,7 +618,7 @@ export class SortableRef<T = any> {
                 this._rearrange(event, direction, item);
 
                 const currentIndex = _.findIndex(this._itemPositions, (it) => it.item === source);
-                // console.log(this._id, currentIndex, index)
+                // console.log(this.id, currentIndex, index)
                 const newIndex = index;
                 moveItemInArray(this._itemPositions, currentIndex, newIndex);
             }
@@ -605,7 +630,7 @@ export class SortableRef<T = any> {
 
     private _cacheItemPositions(outerItem?) {
         const isHorizontal = this.isFloating();
-        this._itemPositions = (outerItem ? [...this._items, outerItem] : this._items).map(item => {
+        this._itemPositions = (outerItem ? [...(this._items.filter(it => it !== outerItem)), outerItem] : this._items).map(item => {
             const elementToMeasure = this._dragDropRegistry.isDragging(item) ?
                 this._getPlaceholder(item) :
                 item.getRootElement();
@@ -686,7 +711,7 @@ export class SortableRef<T = any> {
         const verticalDirection = delta.y;
         const horizontalDirection = delta.x;
 
-        const floating = this.axis === 'x' || this._isFloating(item);
+        const floating = this.isFloating();// this.axis === 'x' || this._isFloating(item);
         return floating ?
             ((horizontalDirection === 1 || verticalDirection === 1) ? 2 : 1) :
             (verticalDirection && (verticalDirection === 1 ? 2 : 1));
@@ -699,7 +724,7 @@ export class SortableRef<T = any> {
         const verticalDirection = delta.y;
         const horizontalDirection = delta.x;
 
-        const floating = this.axis === 'x' || this._isFloating(item);
+        const floating = this.isFloating(); // this.axis === 'x' || this._isFloating(item);
 
         if (floating && horizontalDirection) {
             return (horizontalDirection === 1 && isOverRightHalf) ||

@@ -46,7 +46,7 @@ export class RowRegionComponent implements OnInit {
     if (!!widget) {
       this.widgets.splice(currentIndex, 0, [widget]);
     }
-    console.log(this.widgets)
+    // console.log(this.widgets)
     // 追加组件到相应的位置
   }
 
@@ -86,7 +86,7 @@ export class RowRegionComponent implements OnInit {
     const { item, container, currentIndex, previousContainer, previousIndex, isPointerOverContainer } = $event;
     const sourceData = item.dragData;
 
-    console.log('previousIndex', previousIndex, isPointerOverContainer)
+    // console.log('previousIndex', previousIndex, isPointerOverContainer)
 
     const list = container.sortData as any[];
       // console.log(list)
