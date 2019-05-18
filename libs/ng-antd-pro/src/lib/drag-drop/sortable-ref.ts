@@ -272,6 +272,13 @@ export class SortableRef<T = any> {
     private _handleDragMove(event) {
         const innermostContainer = this._contactContainers(event);
 
+        // scroll
+        if (!!this._scroll(event)) {
+            if (!!innermostContainer) {
+                innermostContainer._cacheItemPositions(event.source);
+            }
+        }
+
         // this._sort(event);
         // expect must be found
         if (innermostContainer === this) {
@@ -493,6 +500,58 @@ export class SortableRef<T = any> {
         }
 
         return innermostContainer;
+    }
+
+    _scroll(event) {
+        const { source, pointerPosition } = event;
+        const placeholder = this._getPlaceholder(source);
+        const scrollParent = getScrollParent(placeholder) as (HTMLElement | Document);
+        const pointerY = pointerPosition.y;
+        const pointerX = pointerPosition.x;
+        const scrollSensitivity = 20;
+        const scrollSpeed = 20;
+        let scrolled = false;
+
+        if (!(scrollParent instanceof Document) && scrollParent.tagName !== "HTML") {
+            const overflowOffset = getOffset(scrollParent);
+
+            if ((overflowOffset.top + scrollParent.offsetHeight) -
+                pointerY < scrollSensitivity) {
+                scrollParent.scrollTop = scrollParent.scrollTop + scrollSpeed;
+                scrolled = true;
+            } else if (pointerY - overflowOffset.top < scrollSensitivity) {
+                scrollParent.scrollTop = scrollParent.scrollTop - scrollSpeed;
+                scrolled = true;
+            }
+
+            if ((overflowOffset.left + scrollParent.offsetWidth) -
+                pointerX < scrollSensitivity) {
+                scrollParent.scrollLeft = scrollParent.scrollLeft + scrollSpeed;
+                scrolled = true;
+            } else if (pointerX - overflowOffset.left < scrollSensitivity) {
+                scrollParent.scrollLeft = scrollParent.scrollLeft - scrollSpeed;
+                scrolled = true;
+            }
+        } else {
+            const docElement = this._document.documentElement;
+            if (pointerY - docElement.scrollTop < scrollSensitivity) {
+                docElement.scrollTop = docElement.scrollTop - scrollSpeed;
+                scrolled = true;
+            } else if (window.innerHeight - (pointerY - docElement.scrollTop) < scrollSensitivity) {
+                docElement.scrollTop = docElement.scrollTop + scrollSpeed;
+                scrolled = true;
+            }
+
+            if (pointerX - docElement.scrollLeft < scrollSensitivity) {
+                docElement.scrollLeft = docElement.scrollLeft - scrollSpeed;
+                scrolled = true;
+            } else if (window.innerWidth - (pointerX - docElement.scrollLeft) < scrollSensitivity) {
+                docElement.scrollLeft = docElement.scrollLeft + scrollSpeed;
+                scrolled = true;
+            }
+        }
+
+        return scrolled;
     }
 
     _sort(event) {
@@ -741,4 +800,62 @@ function removeElement(element: HTMLElement | null) {
     if (element && element.parentNode) {
         element.parentNode.removeChild(element);
     }
+}
+
+function getScrollParent(element: HTMLElement, includeHidden?: boolean) {
+    const position = window.getComputedStyle(element).position;
+    const excludeStaticParent = position === "absolute";
+    const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+    const scrollParent = getElementMatchParent(element, (parent) => {
+        const parentCss = window.getComputedStyle(parent);
+        if (excludeStaticParent && parentCss.position === "static") {
+            return false;
+        }
+        return overflowRegex.test(parentCss.overflow + parentCss.overflowY +
+            parentCss.overflowX);
+    });
+
+    return position === "fixed" || !scrollParent ?
+        (element.ownerDocument || document) :
+        scrollParent;
+}
+
+function getElementMatchParent(element: HTMLElement, predicate: (element: HTMLElement) => boolean) {
+    const parent = element.parentElement;
+    if (!parent) {
+        return null;
+    }
+
+    const isMatch = predicate(parent);
+
+    if (isMatch) {
+        return parent;
+    }
+
+    return getElementMatchParent(parent, predicate);
+}
+
+function getOffset(element: HTMLElement): { top: number, left: number } {
+    if (!element) {
+        return;
+    }
+
+    const ownerDocument = element.ownerDocument;
+    if (!ownerDocument) {
+        return;
+    }
+
+    const docElement = ownerDocument.documentElement;
+    if (!docElement.contains(element)) {
+        return { top: 0, left: 0 };
+    }
+
+    const elRect = element.getBoundingClientRect();
+    const win = window; // jquery 中有一堆...
+
+    return {
+        top: elRect.top + win.pageYOffset - docElement.clientTop,
+        left: elRect.left + win.pageXOffset - docElement.clientLeft
+    };
+
 }
