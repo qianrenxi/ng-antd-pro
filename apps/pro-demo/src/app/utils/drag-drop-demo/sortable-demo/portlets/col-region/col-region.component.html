@@ -1,0 +1,13 @@
+
+<div class="region-drop-container region-cols" npSortable npDragSort="false" npSortAxis="x" (npSortReceive)="colsReceive($event)">
+  <ng-container *ngFor="let colItems of widgets; let i = index;">
+    <div class="region-drop-container region-col" npSortableItem npDragDisabled npSortable npSortConnectWith=".region-drop-container" [npSortData]="colItems" (npSortReceive)="colReceive($event)" (npSortRemove)="colRemoveItem($event)">
+      <div *ngFor="let widget of colItems; let j = index;" npSortableItem [npDragData]="widget" class="widget-box mb-2">
+        {{widget}}
+        <div *npDragPlaceholder class="widget-drop-placeholder np-drag-placeholder">&nbsp;</div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <div class="region-col region-col-placeholder-wrapper" *npDragPlaceholderWrapper></div>
+</div>

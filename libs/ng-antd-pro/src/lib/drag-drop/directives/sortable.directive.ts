@@ -149,6 +149,7 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
       }
 
       ref.scope = this.scope;
+      ref.axis = this.axis;
       ref.sort = coerceBooleanProperty(this.sort);
 
       const placeholderWrapper = this._placeholderWrapperTemplate ? <DragHelperTemplate>{

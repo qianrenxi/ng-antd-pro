@@ -6,56 +6,21 @@
       <div class="item-preview" *npDragPreview>{{item.label}}</div>
     </li>
   </ul>
-  <!-- <ul class="gallery-list items" npSortable npDragSort="false" npSortConnectWith=".region-drop-container">
-    <li class="gallery-item item" npSortableItem npDragMode="clone" npDragData="Item 1">
-      Item 1
-      <div class="item-preview" *npDragPreview>Item 1</div>
-    </li>
-    <li class="gallery-item item" npSortableItem npDragMode="clone" npDragData="Item 2">
-      Item 2
-      <div class="item-preview" *npDragPreview>Item 2</div>
-    </li>
-  </ul> -->
 </div>
 
 <div class="page-wrapper">
   <h5 class="help-title">CONTENT-HEADER</h5>
   <div class="content-region">
-    <div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortReceive)="rowsReceive($event)">
-      <ng-container *ngFor="let rowItems of widgets; let i = index;">
-        <div class="region-drop-container region-row np-drop-active" npSortableItem npDragDisabled npSortable
-          npSortConnectWith=".region-drop-container" [npSortData]="rowItems" (npSortReceive)="rowReceive($event)"
-          (npSortRemove)="rowRemoveItem($event)">
-          <div *ngFor="let widget of rowItems; let j = index;" npSortableItem [npDragData]="widget"
-            class="widget-box d-inline-block mr-2">
-            {{widget}}
-            <div *npDragPlaceholder class="widget-drop-placeholder np-drag-placeholder">&nbsp;</div>
-          </div>
-        </div>
-      </ng-container>
-
-      <div class="region-row region-row-placeholder-wrapper" *npDragPlaceholderWrapper></div>
-    </div>
+    <demo-row-region></demo-row-region>
   </div>
 
   <h5 class="help-title">CONTENT-BODY</h5>
   <div class="content-region">
+    <demo-grid-region></demo-grid-region>
+  </div>
 
-    <!-- <div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortReceive)="rowsReceive($event)">
-      <ng-container *ngFor="let rowItems of widgets; let i = index;">
-        <div class="region-drop-container region-row np-drop-active" npSortableItem npDragDisabled npSortable
-          npSortConnectWith=".region-drop-container" [npSortData]="rowItems" (npSortReceive)="rowReceive($event)"
-          (npSortRemove)="rowRemoveItem($event)">
-          <div *ngFor="let widget of rowItems; let j = index;" npSortableItem [npDragData]="widget"
-            class="widget-box d-inline-block mr-2">
-            {{widget}}
-            <div *npDragPlaceholder class="widget-drop-placeholder np-drag-placeholder">&nbsp;</div>
-          </div>
-        </div>
-      </ng-container>
-
-      <div class="region-row region-row-placeholder-wrapper" *npDragPlaceholderWrapper></div>
-    </div> -->
-
+  <h5 class="help-title">CONTENT-FOOTER</h5>
+  <div class="content-region">
+    <demo-col-region></demo-col-region>
   </div>
 </div>

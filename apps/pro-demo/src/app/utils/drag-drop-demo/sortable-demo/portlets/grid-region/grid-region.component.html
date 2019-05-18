@@ -1,0 +1,9 @@
+<div class="region-drop-container region-rows" npSortable npDragSort="false" (npSortReceive)="rowsReceive($event)">
+  <ng-container *ngFor="let row of rows">
+    <div class="region-row" npSortableItem npDragDisabled npSortable>
+      <demo-col-region></demo-col-region>
+    </div>
+  </ng-container>
+
+  <div class="region-row region-row-placeholder-wrapper" *npDragPlaceholderWrapper></div>
+</div>
