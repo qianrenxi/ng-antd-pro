@@ -255,6 +255,10 @@ export class DraggableRef<T = any> {
         return this._placeholder;
     }
 
+    getPreview() {
+        return this._preview;
+    }
+
     drop(dropRef: DroppableRefInternal) {
         this._dropedInternals.add(dropRef);
         this.dropped.next({

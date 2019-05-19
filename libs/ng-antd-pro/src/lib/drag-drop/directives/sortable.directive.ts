@@ -134,7 +134,7 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
   private _syncInputs(ref: SortableRef<SortableDirective>) {
     ref.beforStarted.subscribe(() => {
       const siblings = SortableDirective._globalSortables
-        .filter(it => isElementMatchSelector(coerceElement(it.element), this.connectWith))
+        .filter(it => isElementMatchSelector(coerceElement(it.element), this.connectWith) && it !== this)
         .map(it => it._sortRef);
 
       ref.connectWith(siblings);

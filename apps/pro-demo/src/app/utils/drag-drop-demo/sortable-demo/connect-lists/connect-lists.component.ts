@@ -22,11 +22,17 @@ export class ConnectListsComponent implements OnInit {
   }
 
   onList1Drop($event) {
-    this.sortOrSwitchItem($event, this.list2, this.list1);
+    const {currentIndex} = $event;
+    if (currentIndex >= 0) {
+      this.sortOrSwitchItem($event, this.list2, this.list1);
+    }
   }
 
   onList2Drop($event) {
-    this.sortOrSwitchItem($event, this.list1, this.list2);
+    const {currentIndex} = $event;
+    if (currentIndex >= 0) {
+      this.sortOrSwitchItem($event, this.list1, this.list2);
+    }
   }
 
   sortOrSwitchItem($event, listA, listB) {
