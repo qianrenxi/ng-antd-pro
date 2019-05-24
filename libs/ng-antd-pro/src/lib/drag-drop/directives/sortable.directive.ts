@@ -52,7 +52,7 @@ export class SortableDirective<S = any> implements AfterContentInit, OnDestroy {
   deactivated = new EventEmitter<any>();
   @Output('npSortLeave')
   leaved = new EventEmitter<any>();
-  @Output('npSortEntere')
+  @Output('npSortEnter')
   entered = new EventEmitter<any>();
   @Output('npSortReceive')
   received = new EventEmitter<any>();
