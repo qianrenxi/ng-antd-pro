@@ -1,0 +1,23 @@
+<!-- Simple Data Table -->
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let col of columns">
+        {{col.name}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let col of columns">
+        {{row[col.field]}}
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <!-- Pagination -->
+  </tfoot>
+</table>
+
+
+<!-- Grid Table -->
