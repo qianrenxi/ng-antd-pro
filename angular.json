@@ -309,6 +309,64 @@
           }
         }
       }
+    },
+    "mock-api": {
+      "root": "apps/mock-api",
+      "sourceRoot": "apps/mock-api/src",
+      "projectType": "application",
+      "prefix": "mock-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/builders:node-build",
+          "options": {
+            "outputPath": "dist/apps/mock-api",
+            "main": "apps/mock-api/src/main.ts",
+            "tsConfig": "apps/mock-api/tsconfig.app.json",
+            "assets": [
+              "apps/mock-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/mock-api/src/environments/environment.ts",
+                  "with": "apps/mock-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/builders:node-execute",
+          "options": {
+            "buildTarget": "mock-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/mock-api/tsconfig.app.json",
+              "apps/mock-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/mock-api/jest.config.js",
+            "tsConfig": "apps/mock-api/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

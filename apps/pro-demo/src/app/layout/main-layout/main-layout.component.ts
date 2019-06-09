@@ -191,6 +191,17 @@ export class MainLayoutComponent implements OnInit {
           path: 'simple'
         },
       ]
+    },
+    {
+      name: 'DataTable',
+      icon: 'table',
+      path: 'data-table',
+      children: [
+        {
+          name: '简单示例',
+          path: 'simple'
+        }
+      ]
     }
   ];
 

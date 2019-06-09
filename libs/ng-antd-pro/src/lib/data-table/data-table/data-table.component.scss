@@ -1,0 +1,44 @@
+$primary-color: #eaf2fd; // rgba(54,133,242,.1);
+$second-color: rgba($primary-color, 0.5);
+// #FBFDFF
+// 1px solid #e8eaed
+
+:host {
+    display: block;
+    position: relative;
+
+    height: 400px;
+    overflow: scroll;
+}
+
+table.np-data-table {
+    background: #ffffff;
+    width: 100%;
+
+    th, td {
+        padding: 0.5rem 0.75rem;
+    }
+
+    > thead {
+        background-color: $primary-color;
+    }
+    
+    > tbody {
+        > tr {
+            &:nth-child(odd) {
+            }
+            
+            &:nth-child(even) {
+                background-color: $second-color;
+            }
+
+            &:hover {
+                background-color: rgba($primary-color, 0.8)
+            }
+        }
+    }
+
+    > tfoot {
+
+    }
+}

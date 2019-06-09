@@ -22,6 +22,9 @@
     },
     "pro-site-e2e": {
       "tags": []
+    },
+    "mock-api": {
+      "tags": []
     }
   }
 }

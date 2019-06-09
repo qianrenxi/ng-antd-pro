@@ -11,6 +11,8 @@ import { DescriptionListComponent } from './description-list/description-list.co
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { DragDropModule } from './drag-drop/drag-drop.module';
 import { GridLayoutModule } from './grid-layout/grid-layout.module';
+import { DataTableModule } from './data-table/data-table.module';
+import { ResizedModule } from './resized/resized.module';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import { GridLayoutModule } from './grid-layout/grid-layout.module';
     DynamicFormModule,
     DragDropModule,
     GridLayoutModule,
+    DataTableModule,
+    ResizedModule,
   ],
   declarations: [
     PageHeaderComponent,
@@ -34,6 +38,8 @@ import { GridLayoutModule } from './grid-layout/grid-layout.module';
     DynamicFormModule,
     DragDropModule,
     GridLayoutModule,
+    DataTableModule,
+    ResizedModule,
 
     PageHeaderComponent,
     AvatarListComponent,

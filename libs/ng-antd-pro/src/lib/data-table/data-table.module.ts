@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataTableComponent } from './data-table/data-table.component';
-import { DataTableDirective } from './data-table/data-table.directive';
+import { ResizedModule } from '../resized';
 
 @NgModule({
-  declarations: [DataTableComponent, DataTableDirective],
   imports: [
-    CommonModule
+    CommonModule,
+    ResizedModule,
   ],
-  exports: [DataTableComponent, DataTableDirective]
+  declarations: [
+    DataTableComponent, 
+  ],
+  exports: [
+    DataTableComponent,
+  ]
 })
 export class DataTableModule { }

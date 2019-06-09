@@ -1,8 +1,8 @@
 <!-- Simple Data Table -->
-<table>
+<table class="np-data-table">
   <thead>
     <tr>
-      <th *ngFor="let col of columns">
+      <th *ngFor="let col of columns" (npResized)="onHeaderCellResized($event)">
         {{col.name}}
       </th>
     </tr>
