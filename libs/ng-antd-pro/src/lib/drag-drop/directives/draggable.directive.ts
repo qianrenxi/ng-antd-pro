@@ -43,6 +43,8 @@ export class DraggableDirective<D = any> implements AfterViewInit, OnChanges, On
 
   @Input('npDragMode') mode: 'clone' | null;
 
+  @Input('npDragPreviewAlways') previewAlways: boolean = false;
+
   @Input('npDragDisabled')
   get disabled(): boolean {
     return this._disabled // || (this.dropContainer && this.dropContainer.disabled);
@@ -72,6 +74,11 @@ export class DraggableDirective<D = any> implements AfterViewInit, OnChanges, On
       subscription.unsubscribe();
     };
   });
+  
+  @HostBinding('class.np-draggable')
+  get draggableStyle() {
+    return !this.disabled;
+  }
 
   @HostBinding('class.np-drag-dragging')
   get bindDraggingClass() {
@@ -162,6 +169,7 @@ export class DraggableDirective<D = any> implements AfterViewInit, OnChanges, On
       ref.disabled = this.disabled;
       ref.lockAxis = this.lockAxis;
       ref.mode = this.mode;
+      ref.previewAlways = coerceBooleanProperty(this.previewAlways);
       ref.withBoundaryElement(this._getBoundaryElement())
         .withPlaceholderTemplate(placeholder)
         .withPreviewTemplate(preview);

@@ -91,6 +91,7 @@ export class DraggableRef<T = any> {
     private _pointerPositionAtLastDirectionChange: Point;
 
     mode: 'clone' | null;
+    previewAlways: boolean;
 
     /** Whether starting to drag this element is disabled. */
     get disabled(): boolean {
@@ -412,7 +413,8 @@ export class DraggableRef<T = any> {
 
         if (this._preview && !this._placeholder) {
             this._destroyPreview();
-            this.ended.next({ source: this });
+            // this.ended.next({ source: this });
+            this._ngZone.run(() => this.ended.next({ source: this }));
             this._dragDropRegistry.stopDragging(this);
         } else {
             this._animatePreviewToPlaceholder().then(() => {
@@ -485,7 +487,7 @@ export class DraggableRef<T = any> {
 
         // }
 
-        if (this._previewTemplate && !this._preview) {
+        if ((this._previewTemplate || this.previewAlways) && !this._preview) {
             const preview = this._preview = this._createPreviewElement();
             this._document.body.appendChild(preview);
         }
